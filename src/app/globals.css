@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Orange+Squash&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
   --background: #ffffff;
@@ -10,7 +11,127 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-nwt-dark-teal: #073E5C;
+  --color-nwt-light-teal: #7CC6BF;
+  --color-nwt-coral: #D86C44;
+  --color-nwt-peach: #E9BF83;
+  
+  --font-family-orange-squash: 'Orange Squash', cursive;
+  --font-family-libra: 'Inter', sans-serif; /* Using Inter as substitute */
 }
+
+@font-face {
+  font-family: 'Orange Squash';
+  src: url('/fonts/Orange-Squash-Demo-BF6483cfe8b2bfc.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@keyframes neon-startup {
+  0% { 
+    filter: brightness(0.3);
+  }
+  5% { 
+    filter: 
+      drop-shadow(0 0 2px #7CC6BF)
+      drop-shadow(0 0 4px #7CC6BF)
+      brightness(0.8);
+  }
+  8% { 
+    filter: brightness(0.4);
+  }
+  12% { 
+    filter: 
+      drop-shadow(0 0 8px #7CC6BF)
+      drop-shadow(0 0 12px #7CC6BF)
+      brightness(1.1);
+  }
+  15% { 
+    filter: brightness(0.5);
+  }
+  20% { 
+    filter: 
+      drop-shadow(0 0 10px #7CC6BF)
+      drop-shadow(0 0 15px #7CC6BF)
+      drop-shadow(0 0 20px #7CC6BF)
+      brightness(1.2);
+  }
+  23% { 
+    filter: brightness(0.6);
+  }
+  28% { 
+    filter: 
+      drop-shadow(0 0 6px #7CC6BF)
+      drop-shadow(0 0 10px #7CC6BF)
+      brightness(0.9);
+  }
+  32% { 
+    filter: 
+      drop-shadow(0 0 12px #7CC6BF)
+      drop-shadow(0 0 18px #E9BF83)
+      drop-shadow(0 0 25px #7CC6BF)
+      brightness(1.3);
+  }
+  35% { 
+    filter: brightness(0.7);
+  }
+  42% { 
+    filter: 
+      drop-shadow(0 0 10px #E9BF83)
+      drop-shadow(0 0 15px #D86C44)
+      drop-shadow(0 0 20px #E9BF83)
+      brightness(1.1);
+  }
+  50%, 100% { 
+    filter: 
+      drop-shadow(0 0 8px #D86C44)
+      drop-shadow(0 0 16px #E9BF83)
+      drop-shadow(0 0 24px #D86C44)
+      brightness(1.1);
+  }
+}
+
+@keyframes neon-subtle-pulse {
+  0%, 100% { 
+    filter: 
+      drop-shadow(0 0 8px #073E5C)
+      drop-shadow(0 0 16px #E9BF83)
+      drop-shadow(0 0 24px #073E5C)
+      brightness(1.1);
+  }
+
+   25% { 
+    filter: 
+      drop-shadow(0 0 6px  #7CC6BF)
+      drop-shadow(0 0 12px #D86C44)
+      drop-shadow(0 0 20px #7CC6BF)
+      brightness(1.05);
+  }
+  
+  50% { 
+    filter: 
+      drop-shadow(0 0 6px  #D86C44)
+      drop-shadow(0 0 12px #D86C44)
+      drop-shadow(0 0 20px  #D86C44)
+      brightness(1.05);
+  }
+
+   75% { 
+    filter: 
+      drop-shadow(0 0 6px #E9BF83)
+      drop-shadow(0 0 12px #D86C44)
+      drop-shadow(0 0 20px #E9BF83)
+      brightness(1.05);
+  }
+}
+
+.neon-realistic {
+  animation: 
+    neon-startup 3s ease-out 0s 1,
+    neon-subtle-pulse 4s ease-in-out 3s infinite;
+}
+
 
 @media (prefers-color-scheme: dark) {
   :root {
