@@ -1,4 +1,4 @@
-import Button from './Button';
+import Button from '../Button';
 
 const AboutOption6 = () => {
   return (

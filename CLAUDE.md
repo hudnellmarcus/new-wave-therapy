@@ -61,6 +61,7 @@ This website represents New Wave Therapy as a collaborative practice of therapis
 - **Follow existing patterns** and code conventions
 - **Use lorem ipsum** for content layout testing
 - **No React.FC syntax** - use regular function declarations instead
+- **Algorithm Review Process**: When implementing algorithms or complex logic, review at least twice and consider edge cases (e.g., empty arrays, single items, maximum/minimum values)
 
 ### Design Approach
 - Focus on typography, spacing, and visual hierarchy
