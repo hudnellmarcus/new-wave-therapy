@@ -15,6 +15,10 @@
   --color-nwt-light-teal: #7CC6BF;
   --color-nwt-coral: #D86C44;
   --color-nwt-peach: #E9BF83;
+  --color-nwt-navy: #2c5282;
+  --color-nwt-cream: #fef5e7;
+  --color-nwt-mint: #81e6d9;
+  --color-nwt-salmon: #fc8181;
   
   --font-family-orange-squash: 'Orange Squash', cursive;
   --font-family-libra: 'Inter', sans-serif; /* Using Inter as substitute */
@@ -130,6 +134,42 @@
   animation: 
     neon-startup 3s ease-out 0s 1,
     neon-subtle-pulse 4s ease-in-out 3s infinite;
+}
+
+/* Stripe utility classes */
+.bg-stripe {
+  background-image: url('/striped_background.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.bg-stripe-subtle {
+  background-image: url('/striped_background.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.1;
+}
+
+.bg-stripe-overlay {
+  position: relative;
+}
+
+.bg-stripe-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/striped_background.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: -1;
 }
 
 

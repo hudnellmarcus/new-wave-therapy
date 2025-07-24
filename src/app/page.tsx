@@ -1,30 +1,23 @@
 "use client";
-import { motion } from "framer-motion";
-import { useState } from "react";
+import Hero from "./components/Hero";
+import AboutOption1 from "./components/AboutOption1";
+import AboutOption2 from "./components/AboutOption2";
+import AboutOption3 from "./components/AboutOption3";
+import AboutOption4 from "./components/AboutOption4";
+import AboutOption5 from "./components/AboutOption5";
+import AboutOption6 from "./components/AboutOption6";
 
 const Home = () => {
   return (
     <>
-      <section className="h-screen">
-        <div className="absolute inset-0">
-          <img
-            src="/stripe_bottom_background.jpeg"
-            className="w-full h-full object-cover"
-            alt="Background"
-          />
-       
-        </div>
-
-        <div className="flex flex-col h-screen items-center justify-start mt-48">
-          <div>
-            <img
-              src="/nwt_logo_kittl.svg"
-              alt="Logo"
-              className="w-[40vw] h-auto neon-realistic"
-            />
-          </div>
-        </div>
-      </section>
+      <Hero />
+      
+      {/* <AboutOption1 /> - Split layout with image placeholder and CTA button */}
+      <AboutOption2 /> {/* Centered design with quote style and service highlights */}
+      {/* <AboutOption3 /> - Two-column with statistics and specializations list */}
+      {/* <AboutOption4 /> - Values-focused with gradient cards and prominent CTA section */}
+      <AboutOption5 /> {/* Journey/process design with timeline and step-by-step approach */}
+      {/* <AboutOption6 /> - Modern asymmetrical layout with overlapping elements */}
     </>
   );
 };
