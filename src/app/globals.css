@@ -144,6 +144,14 @@
   background-position: center;
 }
 
+.bg-stripe-fixed {
+  background-image: url('/striped_background.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
 .bg-stripe-subtle {
   background-image: url('/striped_background.jpeg');
   background-repeat: no-repeat;
