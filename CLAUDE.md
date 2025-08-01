@@ -66,8 +66,13 @@ This website represents New Wave Therapy as a collaborative practice of therapis
 ### Design Approach
 - Focus on typography, spacing, and visual hierarchy
 - Use brand colors consistently
-- Black backgrounds for testing (before implementing stripe backgrounds)
+- **Dark vintage/retro theme** - maintain dark backgrounds with stripe overlays throughout
 - Clean, modern layouts with good responsive behavior
+- **Avoid overly modular/flashy designs** - content should flow naturally without too many separate boxes/cards
+- **Reduce sizing** - avoid overly large text, padding, and elements that feel oversized
+- **Consider layout alignment** - left-justified content can feel unbalanced, explore centering key elements  
+- **Prioritize interactivity** - static pages should include hover states, animations, and dynamic interactions
+- **Expandable content over navigation** - prefer expanding/collapsing sections over separate page routes when appropriate
 
 ## Current Components Status
 
@@ -99,6 +104,13 @@ This website represents New Wave Therapy as a collaborative practice of therapis
 - **Fixed spacing issue**: Changed from min-h-screen to h-screen with proper logo positioning
 - **Logo placement**: Positioned higher in black space area using pt-32
 - **Background**: Uses stripe_bottom_background.jpeg with full coverage
+
+### Team Components
+- **TeamGrid**: Interactive expandable team member bios with state management
+- **Layout**: Trapezoid pattern (5-4-5-4) using scalable chunking algorithm
+- **Interactivity**: Click cards to expand bios inline rather than navigate to separate pages
+- **Styling**: Uses lighter stripe overlay (bg-stripe-overlay-light) with bordered elements
+- **Individual Pages**: 7+ layout options in `/components/team-member-options/` for testing different approaches
 
 ## Current Page Structure
 - **Homepage**: Hero + About section (currently showing multiple options for testing)
