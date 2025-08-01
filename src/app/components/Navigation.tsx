@@ -6,7 +6,7 @@ const Navigation = () => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Link href="/" className="text-2xl font-bold text-white hover:text-nwt-light-teal transition-colors">
+            <Link href="/" className="text-2xl font-bold text-white font-family-orange-squash hover:text-nwt-light-teal transition-colors">
               New Wave Therapy
             </Link>
           </div>
@@ -23,6 +23,9 @@ const Navigation = () => {
             </Link>
             <Link href="/contact" className="text-white hover:text-nwt-light-teal transition-colors font-medium">
               Contact
+            </Link>
+            <Link href="/contact" className="text-white hover:text-nwt-light-teal transition-colors font-medium">
+              About
             </Link>
           </div>
           
