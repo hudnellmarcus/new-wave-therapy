@@ -1,13 +1,12 @@
+import AboutOption1 from './about-options/About1';
+import AboutOption2 from './about-options/About2';
+
 const About = () => {
   return (
-    <section className="py-16">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-8">About Our Practice</h2>
-        <p className="text-lg text-center max-w-3xl mx-auto">
-          Placeholder content for about section - practice info and Hallie's background
-        </p>
-      </div>
-    </section>
+    <div className="bg-v-stripe-overlay">
+      <AboutOption1 />
+      <AboutOption2 />
+    </div>
   );
 };
 

@@ -3,7 +3,7 @@ const Hero = () => {
     <section className="relative h-screen">
       <div className="absolute inset-0">
         <img
-          src="/stripe_bottom_background.jpeg"
+          src="backgrounds/stripe_bottom_background.jpeg"
           className="w-full h-full object-cover"
           alt="Background"
         />

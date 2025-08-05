@@ -1,6 +1,6 @@
-const AboutOption2 = () => {
+const AboutOption1 = () => {
   return (
-    <section className="py-24 bg-black text-white">
+    <section className="py-24 text-white">
       <div className="container mx-auto px-6 max-w-4xl text-center">
         <h2 className="text-6xl font-bold mb-8">
           Healing Through <span className="text-nwt-light-teal">Connection</span>
@@ -53,4 +53,4 @@ const AboutOption2 = () => {
   );
 };
 
-export default AboutOption2;
+export default AboutOption1;

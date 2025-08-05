@@ -2,7 +2,7 @@ import TeamGrid from "../components/TeamGrid";
 
 const TeamPage = () => {
   return (
-    <main>
+    <main className="horizontal-stripe-bg min-h-screen">
       <TeamGrid />
     </main>
   );

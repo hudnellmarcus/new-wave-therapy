@@ -1,12 +1,13 @@
+import RetroTeamMember from "../../components/RetroTeamMember";
+
 const TherapistPage = ({ params }: { params: { therapist: string } }) => {
-  return (
-    <main className="py-16">
-      <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-bold mb-8">Therapist: {params.therapist}</h1>
-        <p>Individual therapist page placeholder</p>
-      </div>
-    </main>
-  );
+  // Convert URL slug back to readable name
+  const therapistName = params.therapist
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+
+  return <RetroTeamMember therapistName={therapistName} />;
 };
 
 export default TherapistPage;

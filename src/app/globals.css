@@ -172,6 +172,63 @@
   z-index: -1;
 }
 
+/* V-Stripe utility classes */
+.bg-v-stripe {
+  background-image: url('/backgrounds/v-stripe_bg.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.bg-v-stripe-subtle {
+  background-image: url('/backgrounds/v-stripe_bg.jpeg');
+  background-repeat: no-repeat;
+  background-size: 90%;
+  background-position: center;
+  opacity: 0.15;
+}
+
+.bg-v-stripe-overlay {
+  position: relative;
+}
+
+.bg-v-stripe-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/backgrounds/v-stripe_bg.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.bg-stripe-overlay-light {
+  position: relative;
+  background-color: black;
+}
+
+.bg-stripe-overlay-light::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/backgrounds/v-stripe_bg.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: -1;
+}
+
 
 @media (prefers-color-scheme: dark) {
   :root {
