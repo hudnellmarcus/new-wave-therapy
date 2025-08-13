@@ -66,7 +66,7 @@ export default function RetroTeamMember({ therapistName = "Sarah Chen" }: RetroT
           {/* Info */}
           <div className="lg:col-span-3 flex flex-col justify-center space-y-8">
             <div>
-              <h1 className="text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">Dr. {therapistName}</h1>
+              <h1 className="text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">{therapistName}</h1>
               <div className="w-16 h-0.5 bg-nwt-light-teal mb-6" />
               <p className="text-xl text-gray-300 mb-2">Licensed Clinical Psychologist</p>
               <p className="text-gray-400">PSY-29454 • 8+ Years Experience</p>
