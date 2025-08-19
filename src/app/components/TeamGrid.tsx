@@ -1,7 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from 'framer-motion';
+import { client } from "@/sanity/client";
+import { type SanityDocument } from "next-sanity";
 
 interface TeamMember {
   id: number;
@@ -15,8 +17,71 @@ interface TeamMember {
   license: string;
 }
 
+interface UnifiedTeamMember {
+  id?: number;
+  _id?: string;
+  name: string;
+  role?: string;
+  title?: string;
+  description?: string;
+  image?: string;
+  bio: string | any;
+  specializations: string[];
+  education?: string;
+  license?: string;
+  credentials?: string;
+  slug?: string;
+}
+
 const TeamGrid = () => {
-  const [expandedMember, setExpandedMember] = useState<number | null>(null);
+  const [expandedMember, setExpandedMember] = useState<string | number | null>(null);
+  const [isInView, setIsInView] = useState(false);
+  const [sanityTeamMembers, setSanityTeamMembers] = useState<UnifiedTeamMember[]>([]);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+        }
+      },
+      { threshold: 0.2, rootMargin: '50px' }
+    );
+
+    const section = sectionRef.current;
+    if (section) {
+      observer.observe(section);
+    }
+
+    return () => {
+      if (section) {
+        observer.unobserve(section);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchTherapists = async () => {
+      try {
+        const query = `*[_type == "therapist" && isActive == true] | order(displayOrder asc) {
+          _id,
+          name,
+          title,
+          credentials,
+          bio,
+          specializations,
+          "slug": slug.current
+        }`;
+        const therapists = await client.fetch(query);
+        setSanityTeamMembers(therapists);
+      } catch (error) {
+        console.log('Sanity fetch failed, using fallback data:', error);
+      }
+    };
+
+    fetchTherapists();
+  }, []);
   const teamMembers: TeamMember[] = [
     {
       id: 1,
@@ -120,11 +185,14 @@ const TeamGrid = () => {
   ];
 
   return (
-    <section className="flex flex-col min-h-screen relative" style={{ backgroundImage: "url('/backgrounds/horizontal_stripe_bg.jpeg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundAttachment: 'fixed' }}>
-      <div className="absolute bg-black/70 inset-0"></div>
+    <section 
+      ref={sectionRef}
+      className={`flex flex-col min-h-screen relative horizontal-stripe-cream-bg viewport-enter ${isInView ? 'in-view' : ''}`}
+    >
+      <div className="absolute bg-black/10 inset-0"></div>
       <div className="container pt-24 mx-auto my-auto px-6 max-w-7xl relative z-10">
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold font-family-orange-squash text-white mb-4">Our team of therapists</h1>
+          <h1 className="text-5xl font-bold font-family-orange-squash text-nwt-dark-teal mb-4">Our team of therapists</h1>
           <p className="text-xl text-white/80 max-w-2xl mx-auto">
             Lorem ipsum dolor sit amet consectetur adipiscing elit ut aliquam 
             purus sit amet luctus venenatis lectus magna fringilla
@@ -133,8 +201,8 @@ const TeamGrid = () => {
         
         <div className="mb-16">
           {(() => {
-            const chunkMembers = (members: TeamMember[]) => {
-              const chunks: TeamMember[][] = [];
+            const chunkMembers = (members: UnifiedTeamMember[]) => {
+              const chunks: UnifiedTeamMember[][] = [];
               let currentIndex = 0;
               let isFivePersonRow = true;
               
@@ -148,25 +216,32 @@ const TeamGrid = () => {
               return chunks;
             };
 
-            const memberRows = chunkMembers(teamMembers);
+            const displayMembers: UnifiedTeamMember[] = sanityTeamMembers.length > 0 ? sanityTeamMembers : teamMembers;
+            const memberRows = chunkMembers(displayMembers);
             
             return (
               <>
                 {memberRows.map((row, rowIndex) => (
                   <div key={rowIndex} className={`flex justify-center gap-10 ${rowIndex < memberRows.length - 1 ? 'mb-8' : ''}`}>
-                    {row.map((member) => (
-                      <div 
-                        key={member.id} 
-                        className="text-center cursor-pointer transition-transform duration-300 hover:scale-110"
-                        onClick={() => setExpandedMember(expandedMember === member.id ? null : member.id)}
-                      >
-                        <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-gray-200 rounded-lg mx-auto mb-3 overflow-hidden">
-                          <div className="w-full h-full bg-gradient-to-br from-nwt-light-teal to-nwt-coral"></div>
+                    {row.map((member, index) => {
+                      const memberId = member._id || member.id || index;
+                      const memberName = member.name;
+                      const memberRole = member.title || member.role;
+                      
+                      return (
+                        <div 
+                          key={memberId} 
+                          className="text-center cursor-pointer transition-transform duration-300 hover:scale-110"
+                          onClick={() => setExpandedMember(expandedMember === memberId ? null : memberId)}
+                        >
+                          <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-gray-200 rounded-lg mx-auto mb-3 overflow-hidden">
+                            <div className="w-full h-full bg-gradient-to-br from-nwt-light-teal to-nwt-coral"></div>
+                          </div>
+                          <h3 className="font-bold text-white text-sm md:text-base mb-1">{memberName}</h3>
+                          <p className="text-white/80 text-xs md:text-sm">{memberRole}</p>
                         </div>
-                        <h3 className="font-bold text-white text-sm md:text-base mb-1">{member.name}</h3>
-                        <p className="text-white/80 text-xs md:text-sm">{member.role}</p>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 ))}
                 
@@ -184,7 +259,7 @@ const TeamGrid = () => {
                       <div className="bg-black/80 backdrop-blur-md rounded-3xl p-8 border border-white/20 max-w-4xl w-full max-h-[80vh] overflow-y-auto"
                            onClick={(e) => e.stopPropagation()}>
                     {(() => {
-                      const member = teamMembers.find(m => m.id === expandedMember);
+                      const member = displayMembers.find(m => (m._id || m.id || displayMembers.indexOf(m)) === expandedMember);
                       if (!member) return null;
                       
                       return (
@@ -192,7 +267,7 @@ const TeamGrid = () => {
                           <div className="flex justify-between items-start mb-6">
                             <div>
                               <h2 className="text-3xl font-bold text-white mb-2">{member.name}</h2>
-                              <p className="text-xl text-nwt-light-teal">{member.role}</p>
+                              <p className="text-xl text-nwt-light-teal">{member.title || member.role}</p>
                             </div>
                             <button 
                               onClick={() => setExpandedMember(null)}
@@ -209,7 +284,7 @@ const TeamGrid = () => {
                               
                               <h3 className="text-xl font-bold text-white mb-4">Specializations</h3>
                               <div className="flex flex-wrap gap-2 mb-6">
-                                {member.specializations.map((spec, index) => (
+                                {member.specializations?.map((spec: string, index: number) => (
                                   <span key={index} className="bg-nwt-coral/80 text-white px-3 py-1 rounded-full text-sm">
                                     {spec}
                                   </span>
@@ -221,13 +296,13 @@ const TeamGrid = () => {
                               <div className="flex-1">
                                 <h3 className="text-xl font-bold text-white mb-4">Background</h3>
                               <div className="space-y-3 text-white/90">
-                                <p>{member.education}</p>
+                                <p>{member.education || member.credentials}</p>
                                 <p>{member.license}</p>
                               </div>
                               
                                 <div className="mt-6">
                                   <Link 
-                                    href={`/team/${member.name.toLowerCase().replace(/\s+/g, '-')}`}
+                                    href={`/team/${member.slug || member.name?.toLowerCase().replace(/\s+/g, '-')}`}
                                     className="inline-block bg-nwt-dark-teal hover:bg-nwt-dark-teal/90 text-white px-6 py-3 mt-20 rounded-lg font-semibold transition-colors"
                                   >
                                     See full profile

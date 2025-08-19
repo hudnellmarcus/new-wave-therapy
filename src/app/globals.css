@@ -16,7 +16,7 @@
   --color-nwt-coral: #D86C44;
   --color-nwt-peach: #E9BF83;
   --color-nwt-navy: #2c5282;
-  --color-nwt-cream: #fef5e7;
+  --color-nwt-cream: #f2e4c2;
   --color-nwt-mint: #81e6d9;
   --color-nwt-salmon: #fc8181;
   
@@ -227,6 +227,124 @@
   opacity: 0.15;
   pointer-events: none;
   z-index: -1;
+}
+
+/* Horizontal stripe with cream background */
+.horizontal-stripe-cream-bg {
+  position: relative;
+  background-color: var(--color-nwt-cream);
+}
+
+.horizontal-stripe-cream-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/backgrounds/horizontal-stripe-no-bg.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.8;
+}
+
+/* Parallax utility classes */
+.parallax-bg-slow {
+  will-change: transform;
+}
+
+.parallax-bg-medium {
+  will-change: transform;
+}
+
+.parallax-bg-fast {
+  will-change: transform;
+}
+
+.parallax-container {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.parallax-element {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Smooth scroll animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.viewport-enter {
+  opacity: 0;
+  transform: translate3d(0, 40px, 0);
+  transition: all 0.8s ease-out;
+}
+
+.viewport-enter.in-view {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Contact page stripe with cream background */
+.contact-stripe-cream-bg {
+  position: relative;
+  background-color: var(--color-nwt-cream);
+}
+
+.contact-stripe-cream-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/backgrounds/stripe-no-bg-1.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 1;
+}
+
+/* Text outline utility for better visibility */
+.text-outline {
+  text-shadow: 
+    1px 1px 0 white,
+    -1px -1px 0 white,
+    1px -1px 0 white,
+    -1px 1px 0 white,
+    2px 2px 2px rgba(0,0,0,0.1);
+}
+
+.text-outline-strong {
+  text-shadow: 
+    2px 2px 0 white,
+    -2px -2px 0 white,
+    2px -2px 0 white,
+    -2px 2px 0 white,
+    1px 1px 0 white,
+    -1px -1px 0 white,
+    1px -1px 0 white,
+    -1px 1px 0 white,
+    3px 3px 3px rgba(0,0,0,0.2);
 }
 
 
