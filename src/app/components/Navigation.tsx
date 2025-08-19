@@ -1,17 +1,58 @@
+"use client";
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Navigation = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const heroHeight = window.innerHeight;
+      setIsScrolled(scrollPosition > heroHeight * 0.5);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50">
-      <div className="container mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <Link href="/" className="text-2xl font-bold text-white hover:text-nwt-light-teal transition-colors">
-              New Wave Therapy
-            </Link>
-          </div>
+    <AnimatePresence>
+      {isScrolled && (
+        <motion.nav 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md"
+        >
+          <div className="container mx-auto px-6 py-4">
+            <div className="flex items-center justify-between">
+              {/* Logo Section - Left Side */}
+              <motion.div 
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+                className="flex items-center"
+              >
+                <Link href="/" className="block">
+                  <img
+                    src="/nwt_logo_kittl.svg"
+                    alt="New Wave Therapy"
+                    className="h-12 w-auto neon-subtle-pulse hover:scale-105 transition-transform duration-300"
+                  />
+                </Link>
+              </motion.div>
           
-          <div className="hidden md:flex items-center space-x-8">
+          {/* Navigation Links - Right Side */}
+          <motion.div 
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
+            className="hidden font-family-orange-squash md:flex md:text-lg items-center space-x-8"
+          >
             <Link href="/" className="text-white hover:text-nwt-light-teal transition-colors font-medium">
               Home
             </Link>
@@ -24,18 +65,68 @@ const Navigation = () => {
             <Link href="/contact" className="text-white hover:text-nwt-light-teal transition-colors font-medium">
               Contact
             </Link>
-          </div>
+          </motion.div>
           
+          {/* Mobile Menu Button */}
           <div className="md:hidden">
-            <button className="text-white hover:text-nwt-light-teal transition-colors">
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="text-white hover:text-nwt-light-teal transition-colors"
+            >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
           </div>
         </div>
-      </div>
-    </nav>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="md:hidden bg-black/90 backdrop-blur-md"
+            >
+              <div className="px-6 py-4 space-y-4">
+                <Link 
+                  href="/" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block text-white hover:text-nwt-light-teal transition-colors font-medium"
+                >
+                  Home
+                </Link>
+                <Link 
+                  href="/faq" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block text-white hover:text-nwt-light-teal transition-colors font-medium"
+                >
+                  FAQ
+                </Link>
+                <Link 
+                  href="/team" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block text-white hover:text-nwt-light-teal transition-colors font-medium"
+                >
+                  Our Team
+                </Link>
+                <Link 
+                  href="/contact" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block text-white hover:text-nwt-light-teal transition-colors font-medium"
+                >
+                  Contact
+                </Link>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+          </div>
+        </motion.nav>
+      )}
+    </AnimatePresence>
   );
 };
 

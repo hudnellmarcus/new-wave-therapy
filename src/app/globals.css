@@ -136,6 +136,10 @@
     neon-subtle-pulse 4s ease-in-out 3s infinite;
 }
 
+.neon-subtle-pulse {
+  animation: neon-subtle-pulse 4s ease-in-out infinite;
+}
+
 /* Stripe utility classes */
 .bg-stripe {
   background-image: url('/striped_background.jpeg');
