@@ -2,10 +2,13 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,7 +23,7 @@ const Navigation = () => {
 
   return (
     <AnimatePresence>
-      {isScrolled && (
+      {(isScrolled || !isHomePage) && (
         <motion.nav 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}

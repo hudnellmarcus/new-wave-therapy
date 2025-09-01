@@ -1,13 +1,18 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import { client } from "@/sanity/client";
 
 interface FAQItem {
-  id: number;
+  _id: string;
   question: string;
   answer: string;
-  color: string;
+  displayOrder: number;
+  category: {
+    title: string;
+    displayOrder: number;
+  };
 }
 
 interface FAQCategory {
@@ -16,177 +21,228 @@ interface FAQCategory {
 }
 
 const FAQ = () => {
-  const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
-  const [expandedSection, setExpandedSection] = useState<string | null>("Insurance & Billing");
+  const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
+  const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [categories, setCategories] = useState<FAQCategory[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const categories: FAQCategory[] = [
+  // Color cycle for automatic assignment
+  const colorCycle = ["bg-nwt-coral", "bg-nwt-peach", "bg-nwt-light-teal", "bg-nwt-mint", "bg-nwt-salmon", "bg-nwt-cream"];
+
+  useEffect(() => {
+    const fetchFAQs = async () => {
+      try {
+        const query = `*[_type == "faq" && isActive == true] | order(category->displayOrder asc, displayOrder asc) {
+          _id,
+          question,
+          answer,
+          displayOrder,
+          category-> {
+            title,
+            displayOrder
+          }
+        }`;
+        
+        const faqs: FAQItem[] = await client.fetch(query);
+        
+        // Group FAQs by category
+        const groupedCategories: FAQCategory[] = [];
+        const categoryMap = new Map<string, FAQCategory>();
+        
+        faqs.forEach((faq) => {
+          const categoryTitle = faq.category.title;
+          if (!categoryMap.has(categoryTitle)) {
+            categoryMap.set(categoryTitle, {
+              title: categoryTitle,
+              items: []
+            });
+            groupedCategories.push(categoryMap.get(categoryTitle)!);
+          }
+          categoryMap.get(categoryTitle)!.items.push(faq);
+        });
+        
+        setCategories(groupedCategories);
+        // Set first category as expanded by default
+        if (groupedCategories.length > 0) {
+          setExpandedSection(groupedCategories[0].title);
+        }
+      } catch (error) {
+        console.log('Failed to fetch FAQs, using fallback data:', error);
+        // Keep existing fallback data structure
+        setCategories(fallbackCategories);
+        setExpandedSection("Insurance & Billing");
+      }
+      setLoading(false);
+    };
+
+    fetchFAQs();
+  }, []);
+
+  // Fallback categories for when Sanity data isn't available
+  const fallbackCategories: FAQCategory[] = [
     {
       title: "Insurance & Billing",
       items: [
         {
-          id: 1,
-          question: "Lorem ipsum dolor sit amet?",
-          answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-          color: "bg-nwt-coral"
+          _id: "1",
+          question: "How much does therapy cost?",
+          answer: "We offer therapy at $125 per session for those without insurance. For those who can afford it, our full fee is $175, which helps fund access for others. We also accept several major insurance providers.",
+          displayOrder: 1,
+          category: { title: "Insurance & Billing", displayOrder: 1 }
         },
         {
-          id: 2,
-          question: "Consectetur adipiscing elit?",
-          answer: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-          color: "bg-nwt-peach"
+          _id: "2",
+          question: "Do you accept insurance?",
+          answer: "Yes! We accept Aetna, Cigna, UnitedHealthcare (UHC)/Optum, and Blue Shield. We're committed to making therapy accessible through in-network options whenever possible.",
+          displayOrder: 2,
+          category: { title: "Insurance & Billing", displayOrder: 1 }
         },
         {
-          id: 3,
-          question: "Sed do eiusmod tempor?",
-          answer: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-          color: "bg-nwt-light-teal"
+          _id: "3",
+          question: "What if my insurance isn't listed?",
+          answer: "If you have out-of-network benefits, you can pay in full and submit our receipt (superbill) to your insurance provider for retroactive reimbursement. Contact us to discuss your specific situation.",
+          displayOrder: 3,
+          category: { title: "Insurance & Billing", displayOrder: 1 }
         },
         {
-          id: 4,
-          question: "Incididunt ut labore?",
-          answer: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-          color: "bg-nwt-mint"
+          _id: "4",
+          question: "Do you offer financial assistance?",
+          answer: "Yes! We partner with programs like the Loveland Foundation for Black and non-binary clients, offering 4-12 sessions. Check our resources page for additional financial support options.",
+          displayOrder: 4,
+          category: { title: "Insurance & Billing", displayOrder: 1 }
         },
         {
-          id: 5,
-          question: "Dolore magna aliqua?",
-          answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
-          color: "bg-nwt-salmon"
+          _id: "5",
+          question: "What is the activist pricing option?",
+          answer: "If you can afford our full fee of $175, we view it as a contribution that helps fund reduced-rate access for others. This shared commitment keeps therapy both ethical and sustainable.",
+          displayOrder: 5,
+          category: { title: "Insurance & Billing", displayOrder: 1 }
         },
-        {
-          id: 6,
-          question: "Ut enim ad minim?",
-          answer: "Totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt.",
-          color: "bg-nwt-cream"
-        }
-      ]
-    },
-    {
-      title: "Services & Approach",
-      items: [
-        {
-          id: 7,
-          question: "Veniam quis nostrud?",
-          answer: "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti.",
-          color: "bg-nwt-coral"
-        },
-        {
-          id: 8,
-          question: "Exercitation ullamco?",
-          answer: "Atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.",
-          color: "bg-nwt-peach"
-        },
-        {
-          id: 9,
-          question: "Laboris nisi ut?",
-          answer: "Similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.",
-          color: "bg-nwt-light-teal"
-        },
-        {
-          id: 10,
-          question: "Aliquip ex ea commodo?",
-          answer: "Et harum quidem rerum facilis est et expedita distinctio nam libero tempore cum soluta nobis.",
-          color: "bg-nwt-mint"
-        },
-        {
-          id: 11,
-          question: "Consequat duis aute?",
-          answer: "Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet.",
-          color: "bg-nwt-salmon"
-        },
-        {
-          id: 12,
-          question: "Irure dolor in?",
-          answer: "Ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.",
-          color: "bg-nwt-cream"
-        }
       ]
     },
     {
       title: "Scheduling & Process",
       items: [
         {
-          id: 13,
-          question: "Reprehenderit in voluptate?",
-          answer: "Velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident.",
-          color: "bg-nwt-coral"
+          _id: "6",
+          question: "When can I schedule appointments?",
+          answer: "We offer telehealth appointments Monday-Friday, plus some weekends. You can book week-to-week or choose a standing appointment that works best for your schedule.",
+          displayOrder: 1,
+          category: { title: "Scheduling & Process", displayOrder: 2 }
         },
         {
-          id: 14,
-          question: "Sunt in culpa qui?",
-          answer: "Officia deserunt mollitia animi id est laborum et dolorum fuga et harum quidem rerum facilis est.",
-          color: "bg-nwt-peach"
+          _id: "7",
+          question: "How does the initial consultation work?",
+          answer: "Start with a FREE 30-minute video consultation. You can meet with as many clinicians as you'd like to ensure you find the best match for your needs.",
+          displayOrder: 2,
+          category: { title: "Scheduling & Process", displayOrder: 2 }
         },
         {
-          id: 15,
-          question: "Et expedita distinctio?",
-          answer: "Nam libero tempore cum soluta nobis est eligendi optio cumque nihil impedit quo minus.",
-          color: "bg-nwt-light-teal"
+          _id: "8",
+          question: "What happens in the first few sessions?",
+          answer: "The first 1-3 sessions focus on your history, identity, and therapy goals. This allows us to do the best possible work when we're fully informed about where you came from and who you are.",
+          displayOrder: 3,
+          category: { title: "Scheduling & Process", displayOrder: 2 }
         },
         {
-          id: 16,
-          question: "Id quod maxime?",
-          answer: "Placeat facere possimus omnis voluptas assumenda est omnis dolor repellendus temporibus autem.",
-          color: "bg-nwt-mint"
+          _id: "9",
+          question: "What is your cancellation policy?",
+          answer: "Cancel more than 24 hours ahead at no charge. Within 24 hours, there's a $50 fee. Same-day cancellations are liable for the full session fee, though we offer a $30 reschedule option for emergencies.",
+          displayOrder: 4,
+          category: { title: "Scheduling & Process", displayOrder: 2 }
         },
         {
-          id: 17,
-          question: "Quibusdam et aut?",
-          answer: "Officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint.",
-          color: "bg-nwt-salmon"
+          _id: "10",
+          question: "Can I end therapy at any time?",
+          answer: "Absolutely. You have full control to end therapy when goals are reached or continue with weekly sessions, monthly check-ins, or reaching out as needed for years. You orchestrate the relationship.",
+          displayOrder: 5,
+          category: { title: "Scheduling & Process", displayOrder: 2 }
+        },
+      ]
+    },
+    {
+      title: "Services & Approach",
+      items: [
+        {
+          _id: "11",
+          question: "What therapy approaches do you use?",
+          answer: "Our clinicians use diverse approaches including somatic therapy, CBT, play therapy, family systems, EMDR, liberation psychology, and trauma-informed care, tailored to each client's needs.",
+          displayOrder: 1,
+          category: { title: "Services & Approach", displayOrder: 3 }
         },
         {
-          id: 18,
-          question: "Molestiae non recusandae?",
-          answer: "Itaque earum rerum hic tenetur a sapiente delectus ut aut reiciendis voluptatibus maiores alias.",
-          color: "bg-nwt-cream"
-        }
+          _id: "12",
+          question: "What makes your practice unique?",
+          answer: "We offer collaborative team supervision, meaning you benefit from multiple perspectives, not just one. Our clinicians meet weekly to think collectively about client care, supported by shared knowledge.",
+          displayOrder: 2,
+          category: { title: "Services & Approach", displayOrder: 3 }
+        },
+        {
+          _id: "13",
+          question: "Do you work with specific communities?",
+          answer: "Yes! We're committed to serving diverse communities, with clinicians who specialize in LGBTQIA+, neurodivergent, multicultural, and trauma-informed care. We offer sessions in English and Spanish.",
+          displayOrder: 3,
+          category: { title: "Services & Approach", displayOrder: 3 }
+        },
+        {
+          _id: "14",
+          question: "What age groups do you serve?",
+          answer: "We work with children, teens, adults, couples, and families. Our clinicians have specialized training in different age groups and can match you with the right fit.",
+          displayOrder: 4,
+          category: { title: "Services & Approach", displayOrder: 3 }
+        },
+        {
+          _id: "15",
+          question: "Do you offer specialized treatments?",
+          answer: "Our team includes specialists in areas like somatic therapy, play therapy, EMDR, eating disorders, immigration trauma, chronic illness, and creative/expressive therapies.",
+          displayOrder: 5,
+          category: { title: "Services & Approach", displayOrder: 3 }
+        },
       ]
     },
     {
       title: "About Our Practice",
       items: [
         {
-          id: 19,
-          question: "Consequatur aut perferendis?",
-          answer: "Doloribus asperiores repellat sed ut perspiciatis unde omnis iste natus error sit voluptatem.",
-          color: "bg-nwt-coral"
+          _id: "16",
+          question: "What are your practice values?",
+          answer: "Our practice is rooted in accessibility, diversity, and collaboration. We keep fees low, honor a wide range of identities, and bring shared team insight into each client's care.",
+          displayOrder: 1,
+          category: { title: "About Our Practice", displayOrder: 4 }
         },
         {
-          id: 20,
-          question: "Accusantium doloremque?",
-          answer: "Laudantium totam rem aperiam eaque ipsa quae ab illo inventore veritatis et quasi architecto.",
-          color: "bg-nwt-peach"
+          _id: "17",
+          question: "How do you support accessibility?",
+          answer: "We operate on conscious capitalism principles, accepting in-network insurance and offering reduced rates to widen access to high-quality mental health care for those who need it most.",
+          displayOrder: 2,
+          category: { title: "About Our Practice", displayOrder: 4 }
         },
         {
-          id: 21,
-          question: "Beatae vitae dicta?",
-          answer: "Sunt explicabo nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.",
-          color: "bg-nwt-light-teal"
+          _id: "18",
+          question: "What is your team approach?",
+          answer: "While you'll choose your individual therapist, each clinician is supported by weekly team supervision. This means you benefit from many perspectives and collective accountability, not just one.",
+          displayOrder: 3,
+          category: { title: "About Our Practice", displayOrder: 4 }
         },
         {
-          id: 22,
-          question: "Sed quia consequuntur?",
-          answer: "Magni dolores eos qui ratione voluptatem sequi nesciunt neque porro quisquam est qui dolorem.",
-          color: "bg-nwt-mint"
+          _id: "19",
+          question: "Do you have diversity representation?",
+          answer: "Yes! We've built a team that reflects the diversity of the communities we serve, with clinicians from various backgrounds who bring lived experience and cultural understanding to their work.",
+          displayOrder: 4,
+          category: { title: "About Our Practice", displayOrder: 4 }
         },
         {
-          id: 23,
-          question: "Ipsum quia dolor?",
-          answer: "Sit amet consectetur adipisci velit sed quia non numquam eius modi tempora incidunt.",
-          color: "bg-nwt-salmon"
+          _id: "20",
+          question: "Do you provide additional resources?",
+          answer: "We maintain a comprehensive resource page with referrals for energy work, EMDR specialists, financial assistance programs, meditation groups, retreats, and specialized workshops.",
+          displayOrder: 5,
+          category: { title: "About Our Practice", displayOrder: 4 }
         },
-        {
-          id: 24,
-          question: "Ut labore et dolore?",
-          answer: "Magnam aliquam quaerat voluptatem ut enim ad minima veniam quis nostrum exercitationem ullam.",
-          color: "bg-nwt-cream"
-        }
       ]
-    }
+    },
   ];
 
-  const toggleCard = (id: number) => {
+  const toggleCard = (id: string) => {
     const newFlippedCards = new Set(flippedCards);
     if (newFlippedCards.has(id)) {
       newFlippedCards.delete(id);
@@ -204,14 +260,26 @@ const FAQ = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <section className="py-16 relative">
+        <div className="container mx-auto px-6 max-w-7xl relative z-10">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold text-white mb-4">Frequently Asked Questions</h1>
+            <p className="text-xl text-white/80 max-w-2xl mx-auto">Loading FAQs...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-16 relative">
       <div className="container mx-auto px-6 max-w-7xl relative z-10">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-white mb-4">Frequently Asked Questions</h1>
           <p className="text-xl text-white/80 max-w-2xl mx-auto">
-            Lorem ipsum dolor sit amet consectetur adipiscing elit ut aliquam 
-            purus sit amet luctus venenatis lectus magna fringilla
+            Get answers to common questions about our therapy services, pricing, and approach.
           </p>
         </div>
         
@@ -241,23 +309,25 @@ const FAQ = () => {
                     className="overflow-hidden"
                   >
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                      {category.items.map((item) => (
+                      {category.items.map((item, index) => {
+                        const cardColor = colorCycle[item.displayOrder % colorCycle.length];
+                        return (
                         <motion.div
-                          key={item.id}
+                          key={item._id}
                           className="relative h-40 cursor-pointer"
-                          onClick={() => toggleCard(item.id)}
+                          onClick={() => toggleCard(item._id)}
                           whileHover={{ scale: 1.03 }}
                           transition={{ duration: 0.2 }}
                         >
                           <motion.div
                             className="absolute inset-0 w-full h-full"
                             style={{ transformStyle: "preserve-3d" }}
-                            animate={{ rotateY: flippedCards.has(item.id) ? 180 : 0 }}
+                            animate={{ rotateY: flippedCards.has(item._id) ? 180 : 0 }}
                             transition={{ duration: 0.6 }}
                           >
                             {/* Front of card */}
                             <div 
-                              className={`absolute inset-0 w-full h-full ${item.color} rounded-lg p-4 flex items-center justify-center text-center shadow-lg border border-white/20`}
+                              className={`absolute inset-0 w-full h-full ${cardColor} rounded-lg p-4 flex items-center justify-center text-center shadow-lg border border-white/20`}
                               style={{ backfaceVisibility: "hidden" }}
                             >
                               <h3 className="text-sm font-bold text-black">
@@ -279,7 +349,7 @@ const FAQ = () => {
                             </div>
                           </motion.div>
                         </motion.div>
-                      ))}
+                      )})}
                     </div>
                   </motion.div>
                 )}

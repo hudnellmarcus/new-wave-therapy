@@ -1,6 +1,10 @@
+"use client";
+import { useState, useEffect } from 'react';
 import Button from "./Button"
 import Link from "next/link"
 import { Phone, Mail, MapPin, Calendar, ArrowLeft } from "lucide-react"
+import { client } from "@/sanity/client";
+import BlockContent from '@sanity/block-content-to-react';
 
 interface BadgeProps {
   children: React.ReactNode;
@@ -16,11 +20,85 @@ const Badge = ({ children, className = "" }: BadgeProps) => {
   );
 };
 
-interface RetroTeamMemberProps {
-  therapistName?: string
+interface TherapistData {
+  _id: string;
+  name: string;
+  title: string;
+  credentials: string;
+  bio: any;
+  specializations: string[];
+  education: string[];
+  email: string;
+  pronouns: string;
+  slug: string;
 }
 
-export default function RetroTeamMember({ therapistName = "Sarah Chen" }: RetroTeamMemberProps) {
+interface RetroTeamMemberProps {
+  therapistSlug?: string;
+}
+
+export default function RetroTeamMember({ therapistSlug }: RetroTeamMemberProps) {
+  const [therapist, setTherapist] = useState<TherapistData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTherapist = async () => {
+      if (!therapistSlug) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const query = `*[_type == "therapist" && slug.current == $slug][0] {
+          _id,
+          name,
+          title,
+          credentials,
+          bio,
+          specializations,
+          education,
+          email,
+          pronouns,
+          "slug": slug.current
+        }`;
+        const therapistData = await client.fetch<TherapistData>(query, { slug: therapistSlug });
+        setTherapist(therapistData);
+      } catch (error) {
+        console.log('Failed to fetch therapist:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTherapist();
+  }, [therapistSlug]);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen text-white relative bg-stripe-overlay-light">
+        <div className="relative z-10 max-w-5xl mx-auto px-6 py-16">
+          <div className="text-center">
+            <p className="text-gray-300">Loading...</p>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (!therapist) {
+    return (
+      <main className="min-h-screen text-white relative bg-stripe-overlay-light">
+        <div className="relative z-10 max-w-5xl mx-auto px-6 py-16">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-white mb-4">Therapist Not Found</h1>
+            <Link href="/team" className="text-nwt-light-teal hover:underline">
+              Back to Team
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
   return (
     <main className="min-h-screen text-white relative bg-stripe-overlay-light">
       {/* Background overlay */}
@@ -66,10 +144,10 @@ export default function RetroTeamMember({ therapistName = "Sarah Chen" }: RetroT
           {/* Info */}
           <div className="lg:col-span-3 flex flex-col justify-center space-y-8">
             <div>
-              <h1 className="text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">{therapistName}</h1>
+              <h1 className="text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">{therapist.name}</h1>
               <div className="w-16 h-0.5 bg-nwt-light-teal mb-6" />
-              <p className="text-xl text-gray-300 mb-2">Licensed Clinical Psychologist</p>
-              <p className="text-gray-400">PSY-29454 • 8+ Years Experience</p>
+              <p className="text-xl text-gray-300 mb-2">{therapist.title}</p>
+              <p className="text-gray-400">{therapist.credentials}</p>
             </div>
 
             {/* Contact */}
@@ -81,7 +159,7 @@ export default function RetroTeamMember({ therapistName = "Sarah Chen" }: RetroT
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-nwt-light-teal" />
                 <span className="font-mono text-sm">
-                  {therapistName.toLowerCase().replace(/\s+/g, ".")}.chen@newwavetherapy.com
+                  {therapist.email || `${therapist.name.toLowerCase().replace(/\s+/g, ".")}@newwavetherapy.com`}
                 </span>
               </div>
               <div className="flex items-center gap-3">
@@ -100,39 +178,58 @@ export default function RetroTeamMember({ therapistName = "Sarah Chen" }: RetroT
         {/* Bio */}
         <div className="mb-16">
           <div className="max-w-4xl">
-            <p className="text-xl text-gray-300 leading-relaxed mb-6">
-              I believe healing happens in the space between vulnerability and safety, where authentic connection meets
-              professional expertise.
-            </p>
-            <p className="text-gray-400 leading-relaxed">
-              My approach to therapy is grounded in the belief that every person has an innate capacity for growth and
-              healing. With over eight years of clinical experience, I specialize in evidence-based treatments for
-              anxiety, depression, and trauma, while never losing sight of the human being behind the diagnosis.
-            </p>
+            {therapist.bio && (
+              <div className="text-xl text-gray-300 leading-relaxed">
+                <BlockContent
+                  blocks={therapist.bio}
+                  serializers={{
+                    types: {
+                      block: (props: any) => {
+                        const { style = 'normal' } = props.node;
+                        
+                        if (style === 'normal') {
+                          return <p className="mb-6 text-gray-300">{props.children}</p>;
+                        }
+                        if (style === 'h1') {
+                          return <h1 className="text-3xl font-bold text-white mb-4">{props.children}</h1>;
+                        }
+                        if (style === 'h2') {
+                          return <h2 className="text-2xl font-bold text-white mb-3">{props.children}</h2>;
+                        }
+                        
+                        return <p className="mb-4 text-gray-300">{props.children}</p>;
+                      }
+                    },
+                    marks: {
+                      strong: ({ children }: any) => <strong className="font-bold text-white">{children}</strong>,
+                      em: ({ children }: any) => <em className="italic">{children}</em>,
+                    }
+                  }}
+                />
+              </div>
+            )}
           </div>
         </div>
 
         {/* Specialties */}
-        <div className="mb-16">
-          <h2 className="text-2xl font-bold text-white mb-8">Areas of Focus</h2>
-          <div className="flex flex-wrap gap-3">
-            <Badge className="bg-nwt-light-teal/20 border-nwt-light-teal text-nwt-light-teal px-4 py-2">
-              Anxiety & Panic
-            </Badge>
-            <Badge className="bg-nwt-coral/20 border-nwt-coral text-nwt-coral px-4 py-2">
-              Depression
-            </Badge>
-            <Badge className="bg-nwt-light-teal/20 border-nwt-light-teal text-nwt-light-teal px-4 py-2">
-              Trauma & PTSD
-            </Badge>
-            <Badge className="bg-nwt-coral/20 border-nwt-coral text-nwt-coral px-4 py-2">
-              Life Transitions
-            </Badge>
-            <Badge className="bg-nwt-light-teal/20 border-nwt-light-teal text-nwt-light-teal px-4 py-2">
-              CBT Specialist
-            </Badge>
+        {therapist.specializations && therapist.specializations.length > 0 && (
+          <div className="mb-16">
+            <h2 className="text-2xl font-bold text-white mb-8">Areas of Focus</h2>
+            <div className="flex flex-wrap gap-3">
+              {therapist.specializations.map((specialization, index) => {
+                const colors = [
+                  "bg-nwt-light-teal/20 border-nwt-light-teal text-nwt-light-teal",
+                  "bg-nwt-coral/20 border-nwt-coral text-nwt-coral"
+                ];
+                return (
+                  <Badge key={index} className={`${colors[index % colors.length]} px-4 py-2`}>
+                    {specialization}
+                  </Badge>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* What to Expect */}
         <div className="grid lg:grid-cols-2 gap-12 mb-16">
@@ -149,18 +246,20 @@ export default function RetroTeamMember({ therapistName = "Sarah Chen" }: RetroT
           <div>
             <h3 className="text-xl font-bold text-white mb-6">Background</h3>
             <div className="space-y-4 text-gray-400 text-sm">
-              <div className="border-l-2 border-nwt-light-teal pl-4">
-                <p className="font-medium text-gray-300">Ph.D. Clinical Psychology</p>
-                <p>UCLA, 2015</p>
-              </div>
-              <div className="border-l-2 border-nwt-coral pl-4">
-                <p className="font-medium text-gray-300">Licensed Clinical Psychologist</p>
-                <p>California Board of Psychology, 2016</p>
-              </div>
-              <div className="border-l-2 border-nwt-light-teal pl-4">
-                <p className="font-medium text-gray-300">CBT Specialist Certification</p>
-                <p>Beck Institute, 2018</p>
-              </div>
+              {therapist.education && therapist.education.length > 0 ? (
+                therapist.education.map((edu, index) => {
+                  const colors = ["border-nwt-light-teal", "border-nwt-coral"];
+                  return (
+                    <div key={index} className={`border-l-2 ${colors[index % colors.length]} pl-4`}>
+                      <p className="font-medium text-gray-300">{edu}</p>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="border-l-2 border-nwt-light-teal pl-4">
+                  <p className="font-medium text-gray-300">{therapist.credentials}</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -170,7 +269,7 @@ export default function RetroTeamMember({ therapistName = "Sarah Chen" }: RetroT
           <div className="bg-gradient-to-br from-nwt-dark-teal via-nwt-navy to-nwt-coral rounded-3xl p-12 md:p-16 border border-white/10">
             <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">Let's Work Together</h3>
             <p className="text-xl text-white/90 mb-10 max-w-3xl mx-auto leading-relaxed">
-              Ready to begin your healing journey? I'm here to provide compassionate, professional support tailored to your unique needs.
+              Ready to begin your healing journey? {therapist.pronouns ? `${therapist.pronouns.split('/')[0]} is` : 'I am'} here to provide compassionate, professional support tailored to your unique needs.
             </p>
             <button className="bg-white text-black hover:bg-gray-100 px-12 py-5 rounded-2xl font-bold text-xl transition-colors shadow-lg">
               Schedule Consultation

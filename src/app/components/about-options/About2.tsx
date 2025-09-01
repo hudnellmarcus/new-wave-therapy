@@ -1,18 +1,66 @@
+"use client";
+import { useState, useEffect } from 'react';
+import { client } from "@/sanity/client";
 import Button from '../Button';
 
+interface ProcessStep {
+  step: number;
+  description: string;
+}
+
+interface SiteSettings {
+  heroHeadline: string;
+  approachText: string;
+  processSteps: ProcessStep[];
+}
+
 const AboutOption2 = () => {
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
+
+  useEffect(() => {
+    const fetchSiteSettings = async () => {
+      try {
+        const query = `*[_type == "siteSettings"][0] {
+          heroHeadline,
+          approachText,
+          processSteps[] {
+            step,
+            description
+          }
+        }`;
+        const settings = await client.fetch<SiteSettings>(query);
+        setSiteSettings(settings);
+      } catch (error) {
+        console.log('Failed to fetch site settings:', error);
+      }
+    };
+
+    fetchSiteSettings();
+  }, []);
+
+
+  if (!siteSettings) {
+    return (
+      <section className="py-24 text-white overflow-hidden">
+        <div className="container mx-auto px-6 max-w-6xl">
+          <div className="text-center">
+            <p className="text-gray-300">Loading...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-24 text-white overflow-hidden">
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
           <div>
             <h2 className="text-5xl font-bold leading-tight mb-6">
-              Your <span className="text-nwt-light-teal">Healing</span><br />
-              Journey Starts Here
+              {siteSettings.heroHeadline}
             </h2>
             <p className="text-xl text-gray-300 leading-relaxed mb-8">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Every path to 
-              wellness is unique, and our team is here to guide you through each step.
+              {siteSettings.approachText}
             </p>
             <Button variant="secondary" size="lg">Begin Your Journey</Button>
           </div>
@@ -22,55 +70,37 @@ const AboutOption2 = () => {
             <div className="relative bg-gray-900 p-8 rounded-3xl">
               <h3 className="text-2xl font-bold text-nwt-peach mb-4">Our Approach</h3>
               <p className="text-gray-300 leading-relaxed">
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
-                reprehenderit in voluptate.
+                We operate as a purpose-driven practice, rooted in the values of conscious capitalism. Making decisions that not only sustain our team, but also widen access to high-quality mental health care.
               </p>
             </div>
           </div>
         </div>
 
         <div className="space-y-12">
-          <div className="flex items-start gap-8 relative">
-            <div className="flex-shrink-0 w-16 h-16 bg-nwt-light-teal rounded-full flex items-center justify-center text-black font-bold text-xl relative z-10">
-              1
-            </div>
-            <div className="absolute left-8 top-16 w-0.5 h-24 bg-nwt-coral"></div>
-            <div className="pt-2">
-              <h3 className="text-2xl font-bold mb-3 text-nwt-light-teal">Initial Consultation</h3>
-              <p className="text-gray-300 text-lg leading-relaxed">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. We begin by 
-                understanding your unique needs and goals for therapy.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-8 relative">
-            <div className="flex-shrink-0 w-16 h-16 bg-nwt-coral rounded-full flex items-center justify-center text-white font-bold text-xl relative z-10">
-              2
-            </div>
-            <div className="absolute left-8 top-16 w-0.5 h-24 bg-nwt-peach"></div>
-            <div className="pt-2">
-              <h3 className="text-2xl font-bold mb-3 text-nwt-coral">Personalized Treatment Plan</h3>
-              <p className="text-gray-300 text-lg leading-relaxed">
-                Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                Our team creates a tailored approach that fits your specific situation.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-8 relative">
-            <div className="flex-shrink-0 w-16 h-16 bg-nwt-peach rounded-full flex items-center justify-center text-black font-bold text-xl relative z-10">
-              3
-            </div>
-            <div className="pt-2">
-              <h3 className="text-2xl font-bold mb-3 text-nwt-peach">Ongoing Support</h3>
-              <p className="text-gray-300 text-lg leading-relaxed">
-                Ut enim ad minim veniam, quis nostrud exercitation. We provide 
-                continuous guidance and adjust our approach as you progress.
-              </p>
-            </div>
-          </div>
+          {siteSettings.processSteps?.map((step, index) => {
+            const colors = ['bg-nwt-light-teal text-black', 'bg-nwt-coral text-white', 'bg-nwt-peach text-black'];
+            const titleColors = ['text-nwt-light-teal', 'text-nwt-coral', 'text-nwt-peach'];
+            const lineColors = ['bg-nwt-coral', 'bg-nwt-peach', ''];
+            
+            return (
+              <div key={step.step} className="flex items-start gap-8 relative">
+                <div className={`flex-shrink-0 w-16 h-16 ${colors[index]} rounded-full flex items-center justify-center font-bold text-xl relative z-10`}>
+                  {step.step}
+                </div>
+                {index < (siteSettings.processSteps?.length || 0) - 1 && (
+                  <div className={`absolute left-8 top-16 w-0.5 h-24 ${lineColors[index]}`}></div>
+                )}
+                <div className="pt-2">
+                  <h3 className={`text-2xl font-bold mb-3 ${titleColors[index]}`}>
+                    Step {step.step}
+                  </h3>
+                  <p className="text-gray-300 text-lg leading-relaxed">
+                    {step.description}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -13,7 +13,7 @@ const Hero = () => {
         <div>
           <img
             src="/nwt_logo_kittl.svg"
-            alt="Logo"
+            alt="New Wave Therapy Logo"
             className="w-[40vw] h-auto neon-realistic"
           />
         </div>
