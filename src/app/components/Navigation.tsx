@@ -1,5 +1,6 @@
 "use client";
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
@@ -41,9 +42,11 @@ const Navigation = () => {
                 className="flex items-center"
               >
                 <Link href="/" className="block">
-                  <img
+                  <Image
                     src="/nwt_logo_kittl.svg"
                     alt="New Wave Therapy"
+                    width={200}
+                    height={48}
                     className="h-12 w-auto neon-subtle-pulse hover:scale-105 transition-transform duration-300"
                   />
                 </Link>

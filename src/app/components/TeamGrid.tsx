@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { client } from "@/sanity/client";
-import { type SanityDocument } from "next-sanity";
 import BlockContent from "@sanity/block-content-to-react";
 
 interface TeamMember {
@@ -26,7 +25,7 @@ interface UnifiedTeamMember {
   title?: string;
   description?: string;
   image?: string;
-  bio: string | any;
+  bio: string | unknown;
   specializations: string[];
   education?: string;
   license?: string;
@@ -380,23 +379,22 @@ const TeamGrid = () => {
                                         blocks={member.bio}
                                         serializers={{
                                           types: {
-                                            block: (props: any) => {
-                                              const { style = "normal" } =
-                                                props.node;
+                                            block: (props: unknown) => {
+                                              const blockProps = props as { children: React.ReactNode };
                                               return (
                                                 <p className="mb-4 text-white/90">
-                                                  {props.children}
+                                                  {blockProps.children}
                                                 </p>
                                               );
                                             },
                                           },
                                           marks: {
-                                            strong: ({ children }: any) => (
+                                            strong: ({ children }: { children: React.ReactNode }) => (
                                               <strong className="font-bold text-white">
                                                 {children}
                                               </strong>
                                             ),
-                                            em: ({ children }: any) => (
+                                            em: ({ children }: { children: React.ReactNode }) => (
                                               <em className="italic">
                                                 {children}
                                               </em>

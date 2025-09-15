@@ -251,7 +251,7 @@ const Contact = () => {
                           Submit Contact Form
                         </Button>
                         <p className="text-center text-xs text-nwt-dark-teal/50">
-                          You'll receive a confirmation email and we'll be in
+                          You&apos;ll receive a confirmation email and we&apos;ll be in
                           touch within 24 hours.
                         </p>
                       </div>

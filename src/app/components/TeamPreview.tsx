@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 const TeamPreview = () => {
   return (
     <section className="py-16">
@@ -7,9 +9,9 @@ const TeamPreview = () => {
           Meet our experienced therapists and associates
         </p>
         <div className="text-center">
-          <a href="/team" className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+          <Link href="/team" className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
             Meet the Full Team
-          </a>
+          </Link>
         </div>
       </div>
     </section>

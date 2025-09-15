@@ -63,7 +63,7 @@ const ContactOption2 = () => {
               Ready to Begin?
             </h2>
             <p className="text-lg text-gray-300 mb-8">
-              Fill out our simple contact form and we'll get back to you within 24 hours to schedule your initial consultation.
+              Fill out our simple contact form and we&apos;ll get back to you within 24 hours to schedule your initial consultation.
             </p>
             
             <form className="space-y-6 text-left">
@@ -136,7 +136,7 @@ const ContactOption2 = () => {
 
           <div className="mt-16 text-center">
             <p className="text-gray-400 mb-4">
-              Need immediate support? We're here for you.
+              Need immediate support? We&apos;re here for you.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button variant="ghost" size="md">

@@ -328,6 +328,130 @@
   opacity: 1;
 }
 
+/* Text Animation Classes */
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes typewriter {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes blink {
+  0%, 50% {
+    border-color: transparent;
+  }
+  51%, 100% {
+    border-color: #7CC6BF;
+  }
+}
+
+@keyframes staggerFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slideInFromLeft 0.8s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInFromRight 0.8s ease-out;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.6s ease-out;
+}
+
+.animate-typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid #7CC6BF;
+  animation: typewriter 2s steps(40, end), blink 1s step-end infinite;
+}
+
+.animate-stagger-1 {
+  animation: staggerFadeIn 0.6s ease-out 0.1s both;
+}
+
+.animate-stagger-2 {
+  animation: staggerFadeIn 0.6s ease-out 0.2s both;
+}
+
+.animate-stagger-3 {
+  animation: staggerFadeIn 0.6s ease-out 0.3s both;
+}
+
+.animate-stagger-4 {
+  animation: staggerFadeIn 0.6s ease-out 0.4s both;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+  0% {
+    text-shadow: 0 0 5px #7CC6BF, 0 0 10px #7CC6BF, 0 0 15px #7CC6BF;
+  }
+  100% {
+    text-shadow: 0 0 10px #E9BF83, 0 0 20px #E9BF83, 0 0 30px #E9BF83;
+  }
+}
+
 /* Text outline utility for better visibility */
 .text-outline {
   text-shadow: 

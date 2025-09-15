@@ -25,7 +25,7 @@ interface TherapistData {
   name: string;
   title: string;
   credentials: string;
-  bio: any;
+  bio: React.ReactNode;
   specializations: string[];
   education: string[];
   email: string;
@@ -184,25 +184,26 @@ export default function RetroTeamMember({ therapistSlug }: RetroTeamMemberProps)
                   blocks={therapist.bio}
                   serializers={{
                     types: {
-                      block: (props: any) => {
-                        const { style = 'normal' } = props.node;
-                        
+                      block: (props: unknown) => {
+                        const blockProps = props as { node: { style?: string }; children: React.ReactNode };
+                        const { style = 'normal' } = blockProps.node;
+
                         if (style === 'normal') {
-                          return <p className="mb-6 text-gray-300">{props.children}</p>;
+                          return <p className="mb-6 text-gray-300">{blockProps.children}</p>;
                         }
                         if (style === 'h1') {
-                          return <h1 className="text-3xl font-bold text-white mb-4">{props.children}</h1>;
+                          return <h1 className="text-3xl font-bold text-white mb-4">{blockProps.children}</h1>;
                         }
                         if (style === 'h2') {
-                          return <h2 className="text-2xl font-bold text-white mb-3">{props.children}</h2>;
+                          return <h2 className="text-2xl font-bold text-white mb-3">{blockProps.children}</h2>;
                         }
-                        
-                        return <p className="mb-4 text-gray-300">{props.children}</p>;
+
+                        return <p className="mb-4 text-gray-300">{blockProps.children}</p>;
                       }
                     },
                     marks: {
-                      strong: ({ children }: any) => <strong className="font-bold text-white">{children}</strong>,
-                      em: ({ children }: any) => <em className="italic">{children}</em>,
+                      strong: ({ children }: { children: React.ReactNode }) => <strong className="font-bold text-white">{children}</strong>,
+                      em: ({ children }: { children: React.ReactNode }) => <em className="italic">{children}</em>,
                     }
                   }}
                 />
@@ -238,8 +239,8 @@ export default function RetroTeamMember({ therapistSlug }: RetroTeamMemberProps)
             <div className="space-y-4 text-gray-400">
               <p>Our first session focuses on understanding your unique situation and goals.</p>
               <p>I use evidence-based approaches tailored to your specific needs and preferences.</p>
-              <p>Sessions are collaborative - you're the expert on your own experience.</p>
-              <p>We'll work at your pace in a judgment-free, supportive environment.</p>
+              <p>Sessions are collaborative - you&apos;re the expert on your own experience.</p>
+              <p>We&apos;ll work at your pace in a judgment-free, supportive environment.</p>
             </div>
           </div>
 
@@ -267,7 +268,7 @@ export default function RetroTeamMember({ therapistSlug }: RetroTeamMemberProps)
         {/* CTA */}
         <div className="text-center">
           <div className="bg-gradient-to-br from-nwt-dark-teal via-nwt-navy to-nwt-coral rounded-3xl p-12 md:p-16 border border-white/10">
-            <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">Let's Work Together</h3>
+            <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">Let&apos;s Work Together</h3>
             <p className="text-xl text-white/90 mb-10 max-w-3xl mx-auto leading-relaxed">
               Ready to begin your healing journey? {therapist.pronouns ? `${therapist.pronouns.split('/')[0]} is` : 'I am'} here to provide compassionate, professional support tailored to your unique needs.
             </p>

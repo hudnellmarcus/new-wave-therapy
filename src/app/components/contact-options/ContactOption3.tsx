@@ -8,11 +8,11 @@ const ContactOption3 = () => {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-20">
               <h1 className="text-5xl md:text-7xl font-bold mb-6">
-                <span className="text-nwt-light-teal">Let's</span>{" "}
+                <span className="text-nwt-light-teal">Let&apos;s</span>{" "}
                 <span className="text-nwt-coral">Talk</span>
               </h1>
               <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
-                Taking the first step towards therapy can feel overwhelming. We're here to make it as comfortable and straightforward as possible.
+                Taking the first step towards therapy can feel overwhelming. We&apos;re here to make it as comfortable and straightforward as possible.
               </p>
             </div>
 
@@ -94,7 +94,7 @@ const ContactOption3 = () => {
                     Get Started Today
                   </h2>
                   <p className="text-gray-400 mb-8">
-                    Complete this form and we'll reach out to schedule your consultation.
+                    Complete this form and we&apos;ll reach out to schedule your consultation.
                   </p>
                   
                   <form className="space-y-6">
@@ -220,7 +220,7 @@ const ContactOption3 = () => {
                         Submit Contact Form
                       </Button>
                       <p className="text-center text-xs text-gray-500">
-                        You'll receive a confirmation email and we'll be in touch within 24 hours.
+                        You&apos;ll receive a confirmation email and we&apos;ll be in touch within 24 hours.
                       </p>
                     </div>
                   </form>

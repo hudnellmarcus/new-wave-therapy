@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { client } from "@/sanity/client";
@@ -28,6 +28,149 @@ const FAQ = () => {
 
   // Color cycle for automatic assignment
   const colorCycle = ["bg-nwt-coral", "bg-nwt-peach", "bg-nwt-light-teal", "bg-nwt-mint", "bg-nwt-salmon", "bg-nwt-cream"];
+
+  // Fallback categories for when Sanity data isn't available
+  const fallbackCategories: FAQCategory[] = useMemo(() => [
+    {
+      title: "Insurance & Billing",
+      items: [
+        {
+          _id: "1",
+          question: "How much does therapy cost?",
+          answer: "We offer therapy at $125 per session for those without insurance. For those who can afford it, our full fee is $175, which helps fund access for others. We also accept several major insurance providers.",
+          displayOrder: 1,
+          category: { title: "Insurance & Billing", displayOrder: 1 }
+        },
+        {
+          _id: "2",
+          question: "Do you accept insurance?",
+          answer: "We work with most major insurance providers including Aetna, BlueCross BlueShield, Cigna, and UnitedHealth. We also offer sliding scale fees for those without coverage.",
+          displayOrder: 2,
+          category: { title: "Insurance & Billing", displayOrder: 1 }
+        },
+        {
+          _id: "3",
+          question: "What is your cancellation policy?",
+          answer: "We require 24 hours notice for cancellations. Same-day cancellations may be subject to the full session fee unless due to emergency circumstances.",
+          displayOrder: 3,
+          category: { title: "Insurance & Billing", displayOrder: 1 }
+        },
+        {
+          _id: "4",
+          question: "How do I pay for sessions?",
+          answer: "We accept cash, check, and all major credit cards. Payment is due at the time of service unless other arrangements have been made in advance.",
+          displayOrder: 4,
+          category: { title: "Insurance & Billing", displayOrder: 1 }
+        },
+      ]
+    },
+    {
+      title: "Getting Started",
+      items: [
+        {
+          _id: "5",
+          question: "How do I schedule my first appointment?",
+          answer: "You can schedule by calling our office, using our online booking system, or by filling out our contact form. We'll respond within 24 hours to confirm your appointment.",
+          displayOrder: 1,
+          category: { title: "Getting Started", displayOrder: 2 }
+        },
+        {
+          _id: "6",
+          question: "What should I expect in my first session?",
+          answer: "Your first session is about getting to know each other. We'll discuss your goals, concerns, and what brings you to therapy. This helps us create a personalized treatment plan together.",
+          displayOrder: 2,
+          category: { title: "Getting Started", displayOrder: 2 }
+        },
+        {
+          _id: "7",
+          question: "How long are therapy sessions?",
+          answer: "Standard therapy sessions are 50 minutes long. We also offer 80-minute extended sessions for deeper work when appropriate.",
+          displayOrder: 3,
+          category: { title: "Getting Started", displayOrder: 2 }
+        },
+        {
+          _id: "8",
+          question: "How often should I come to therapy?",
+          answer: "Most clients begin with weekly sessions. As you progress, we may adjust frequency based on your needs and goals. Some clients benefit from bi-weekly or monthly sessions.",
+          displayOrder: 4,
+          category: { title: "Getting Started", displayOrder: 2 }
+        },
+      ]
+    },
+    {
+      title: "Our Approach",
+      items: [
+        {
+          _id: "9",
+          question: "What therapy approaches do you use?",
+          answer: "We use evidence-based approaches including CBT, DBT, EMDR, mindfulness-based therapy, and somatic approaches. Treatment is always tailored to your specific needs and preferences.",
+          displayOrder: 1,
+          category: { title: "Our Approach", displayOrder: 3 }
+        },
+        {
+          _id: "10",
+          question: "Do you offer online therapy sessions?",
+          answer: "Yes, we offer secure video therapy sessions for your convenience. Online sessions are just as effective as in-person for many concerns and provide flexibility in scheduling.",
+          displayOrder: 2,
+          category: { title: "Our Approach", displayOrder: 3 }
+        },
+        {
+          _id: "11",
+          question: "What issues do you specialize in?",
+          answer: "Our team specializes in anxiety, depression, trauma, relationship issues, life transitions, grief, and personal growth. We also offer specialized approaches for specific populations and concerns.",
+          displayOrder: 3,
+          category: { title: "Our Approach", displayOrder: 3 }
+        },
+        {
+          _id: "12",
+          question: "Is everything I share confidential?",
+          answer: "Yes, everything you share is confidential with rare exceptions required by law (such as immediate danger to self or others). We'll discuss confidentiality limits in detail during your first session.",
+          displayOrder: 4,
+          category: { title: "Our Approach", displayOrder: 3 }
+        },
+      ]
+    },
+    {
+      title: "About Our Practice",
+      items: [
+        {
+          _id: "13",
+          question: "What makes New Wave Therapy different?",
+          answer: "We combine evidence-based practices with a holistic, collaborative approach. Our team values authenticity, creativity, and meeting you exactly where you are in your journey.",
+          displayOrder: 1,
+          category: { title: "About Our Practice", displayOrder: 4 }
+        },
+        {
+          _id: "14",
+          question: "Can I choose my therapist?",
+          answer: "Absolutely! We'll help match you with a therapist whose expertise and approach align with your needs and preferences. The therapeutic relationship is crucial to your success.",
+          displayOrder: 2,
+          category: { title: "About Our Practice", displayOrder: 4 }
+        },
+        {
+          _id: "15",
+          question: "Do you offer couples or family therapy?",
+          answer: "Yes, several of our therapists specialize in couples and family therapy. We use approaches like Emotionally Focused Therapy (EFT) and the Gottman Method.",
+          displayOrder: 3,
+          category: { title: "About Our Practice", displayOrder: 4 }
+        },
+        {
+          _id: "16",
+          question: "What if I need additional support between sessions?",
+          answer: "We provide crisis resources and encourage you to reach out if you're struggling. For ongoing support, we can discuss increasing session frequency or connecting you with additional resources.",
+          displayOrder: 4,
+          category: { title: "About Our Practice", displayOrder: 4 }
+        },
+        {
+          _id: "17",
+          question: "Do you have resources beyond therapy?",
+          answer: "We maintain a comprehensive resource page with referrals for energy work, EMDR specialists, financial assistance programs, meditation groups, retreats, and specialized workshops.",
+          displayOrder: 5,
+          category: { title: "About Our Practice", displayOrder: 4 }
+        },
+      ]
+    },
+  ], []);
 
   useEffect(() => {
     const fetchFAQs = async () => {
@@ -76,171 +219,8 @@ const FAQ = () => {
     };
 
     fetchFAQs();
-  }, []);
+  }, [fallbackCategories]);
 
-  // Fallback categories for when Sanity data isn't available
-  const fallbackCategories: FAQCategory[] = [
-    {
-      title: "Insurance & Billing",
-      items: [
-        {
-          _id: "1",
-          question: "How much does therapy cost?",
-          answer: "We offer therapy at $125 per session for those without insurance. For those who can afford it, our full fee is $175, which helps fund access for others. We also accept several major insurance providers.",
-          displayOrder: 1,
-          category: { title: "Insurance & Billing", displayOrder: 1 }
-        },
-        {
-          _id: "2",
-          question: "Do you accept insurance?",
-          answer: "Yes! We accept Aetna, Cigna, UnitedHealthcare (UHC)/Optum, and Blue Shield. We're committed to making therapy accessible through in-network options whenever possible.",
-          displayOrder: 2,
-          category: { title: "Insurance & Billing", displayOrder: 1 }
-        },
-        {
-          _id: "3",
-          question: "What if my insurance isn't listed?",
-          answer: "If you have out-of-network benefits, you can pay in full and submit our receipt (superbill) to your insurance provider for retroactive reimbursement. Contact us to discuss your specific situation.",
-          displayOrder: 3,
-          category: { title: "Insurance & Billing", displayOrder: 1 }
-        },
-        {
-          _id: "4",
-          question: "Do you offer financial assistance?",
-          answer: "Yes! We partner with programs like the Loveland Foundation for Black and non-binary clients, offering 4-12 sessions. Check our resources page for additional financial support options.",
-          displayOrder: 4,
-          category: { title: "Insurance & Billing", displayOrder: 1 }
-        },
-        {
-          _id: "5",
-          question: "What is the activist pricing option?",
-          answer: "If you can afford our full fee of $175, we view it as a contribution that helps fund reduced-rate access for others. This shared commitment keeps therapy both ethical and sustainable.",
-          displayOrder: 5,
-          category: { title: "Insurance & Billing", displayOrder: 1 }
-        },
-      ]
-    },
-    {
-      title: "Scheduling & Process",
-      items: [
-        {
-          _id: "6",
-          question: "When can I schedule appointments?",
-          answer: "We offer telehealth appointments Monday-Friday, plus some weekends. You can book week-to-week or choose a standing appointment that works best for your schedule.",
-          displayOrder: 1,
-          category: { title: "Scheduling & Process", displayOrder: 2 }
-        },
-        {
-          _id: "7",
-          question: "How does the initial consultation work?",
-          answer: "Start with a FREE 30-minute video consultation. You can meet with as many clinicians as you'd like to ensure you find the best match for your needs.",
-          displayOrder: 2,
-          category: { title: "Scheduling & Process", displayOrder: 2 }
-        },
-        {
-          _id: "8",
-          question: "What happens in the first few sessions?",
-          answer: "The first 1-3 sessions focus on your history, identity, and therapy goals. This allows us to do the best possible work when we're fully informed about where you came from and who you are.",
-          displayOrder: 3,
-          category: { title: "Scheduling & Process", displayOrder: 2 }
-        },
-        {
-          _id: "9",
-          question: "What is your cancellation policy?",
-          answer: "Cancel more than 24 hours ahead at no charge. Within 24 hours, there's a $50 fee. Same-day cancellations are liable for the full session fee, though we offer a $30 reschedule option for emergencies.",
-          displayOrder: 4,
-          category: { title: "Scheduling & Process", displayOrder: 2 }
-        },
-        {
-          _id: "10",
-          question: "Can I end therapy at any time?",
-          answer: "Absolutely. You have full control to end therapy when goals are reached or continue with weekly sessions, monthly check-ins, or reaching out as needed for years. You orchestrate the relationship.",
-          displayOrder: 5,
-          category: { title: "Scheduling & Process", displayOrder: 2 }
-        },
-      ]
-    },
-    {
-      title: "Services & Approach",
-      items: [
-        {
-          _id: "11",
-          question: "What therapy approaches do you use?",
-          answer: "Our clinicians use diverse approaches including somatic therapy, CBT, play therapy, family systems, EMDR, liberation psychology, and trauma-informed care, tailored to each client's needs.",
-          displayOrder: 1,
-          category: { title: "Services & Approach", displayOrder: 3 }
-        },
-        {
-          _id: "12",
-          question: "What makes your practice unique?",
-          answer: "We offer collaborative team supervision, meaning you benefit from multiple perspectives, not just one. Our clinicians meet weekly to think collectively about client care, supported by shared knowledge.",
-          displayOrder: 2,
-          category: { title: "Services & Approach", displayOrder: 3 }
-        },
-        {
-          _id: "13",
-          question: "Do you work with specific communities?",
-          answer: "Yes! We're committed to serving diverse communities, with clinicians who specialize in LGBTQIA+, neurodivergent, multicultural, and trauma-informed care. We offer sessions in English and Spanish.",
-          displayOrder: 3,
-          category: { title: "Services & Approach", displayOrder: 3 }
-        },
-        {
-          _id: "14",
-          question: "What age groups do you serve?",
-          answer: "We work with children, teens, adults, couples, and families. Our clinicians have specialized training in different age groups and can match you with the right fit.",
-          displayOrder: 4,
-          category: { title: "Services & Approach", displayOrder: 3 }
-        },
-        {
-          _id: "15",
-          question: "Do you offer specialized treatments?",
-          answer: "Our team includes specialists in areas like somatic therapy, play therapy, EMDR, eating disorders, immigration trauma, chronic illness, and creative/expressive therapies.",
-          displayOrder: 5,
-          category: { title: "Services & Approach", displayOrder: 3 }
-        },
-      ]
-    },
-    {
-      title: "About Our Practice",
-      items: [
-        {
-          _id: "16",
-          question: "What are your practice values?",
-          answer: "Our practice is rooted in accessibility, diversity, and collaboration. We keep fees low, honor a wide range of identities, and bring shared team insight into each client's care.",
-          displayOrder: 1,
-          category: { title: "About Our Practice", displayOrder: 4 }
-        },
-        {
-          _id: "17",
-          question: "How do you support accessibility?",
-          answer: "We operate on conscious capitalism principles, accepting in-network insurance and offering reduced rates to widen access to high-quality mental health care for those who need it most.",
-          displayOrder: 2,
-          category: { title: "About Our Practice", displayOrder: 4 }
-        },
-        {
-          _id: "18",
-          question: "What is your team approach?",
-          answer: "While you'll choose your individual therapist, each clinician is supported by weekly team supervision. This means you benefit from many perspectives and collective accountability, not just one.",
-          displayOrder: 3,
-          category: { title: "About Our Practice", displayOrder: 4 }
-        },
-        {
-          _id: "19",
-          question: "Do you have diversity representation?",
-          answer: "Yes! We've built a team that reflects the diversity of the communities we serve, with clinicians from various backgrounds who bring lived experience and cultural understanding to their work.",
-          displayOrder: 4,
-          category: { title: "About Our Practice", displayOrder: 4 }
-        },
-        {
-          _id: "20",
-          question: "Do you provide additional resources?",
-          answer: "We maintain a comprehensive resource page with referrals for energy work, EMDR specialists, financial assistance programs, meditation groups, retreats, and specialized workshops.",
-          displayOrder: 5,
-          category: { title: "About Our Practice", displayOrder: 4 }
-        },
-      ]
-    },
-  ];
 
   const toggleCard = (id: string) => {
     const newFlippedCards = new Set(flippedCards);
@@ -309,7 +289,7 @@ const FAQ = () => {
                     className="overflow-hidden"
                   >
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                      {category.items.map((item, index) => {
+                      {category.items.map((item) => {
                         const cardColor = colorCycle[item.displayOrder % colorCycle.length];
                         return (
                         <motion.div

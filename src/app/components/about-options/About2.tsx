@@ -53,10 +53,10 @@ const AboutOption2 = () => {
 
   return (
     <section className="py-24 text-white overflow-hidden">
-      <div className="container mx-auto px-6 max-w-6xl">
+      <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
           <div>
-            <h2 className="text-5xl font-bold leading-tight mb-6">
+            <h2 className="text-5xl md:text-6xl font-bold font-family-orange-squash leading-tight mb-6">
               {siteSettings.heroHeadline}
             </h2>
             <p className="text-xl text-gray-300 leading-relaxed mb-8">
@@ -88,7 +88,7 @@ const AboutOption2 = () => {
                   {step.step}
                 </div>
                 {index < (siteSettings.processSteps?.length || 0) - 1 && (
-                  <div className={`absolute left-8 top-16 w-0.5 h-24 ${lineColors[index]}`}></div>
+                  <div className={`absolute left-8 top-16 w-0.5 h-32 ${lineColors[index]}`}></div>
                 )}
                 <div className="pt-2">
                   <h3 className={`text-2xl font-bold mb-3 ${titleColors[index]}`}>
