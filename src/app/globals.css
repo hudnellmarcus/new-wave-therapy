@@ -452,6 +452,35 @@
   }
 }
 
+/* Scroll indicator animations */
+.animate-fade-in-delay {
+  animation: fadeInDelay 0.8s ease-out 2s forwards;
+}
+
+.animate-bounce-gentle {
+  animation: bounceGentle 2s ease-in-out infinite;
+}
+
+@keyframes fadeInDelay {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceGentle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
 /* Text outline utility for better visibility */
 .text-outline {
   text-shadow: 

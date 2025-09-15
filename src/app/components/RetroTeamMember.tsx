@@ -1,9 +1,11 @@
 "use client";
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import Button from "./Button"
 import Link from "next/link"
 import { Phone, Mail, MapPin, Calendar, ArrowLeft } from "lucide-react"
 import { client } from "@/sanity/client";
+import { urlFor } from "@/sanity/image";
 import BlockContent from '@sanity/block-content-to-react';
 
 interface BadgeProps {
@@ -59,6 +61,7 @@ export default function RetroTeamMember({ therapistSlug }: RetroTeamMemberProps)
           education,
           email,
           pronouns,
+          primaryPhoto,
           "slug": slug.current
         }`;
         const therapistData = await client.fetch<TherapistData>(query, { slug: therapistSlug });
@@ -129,15 +132,26 @@ export default function RetroTeamMember({ therapistSlug }: RetroTeamMemberProps)
           {/* Photo */}
           <div className="lg:col-span-2">
             <div className="aspect-[4/5] bg-gradient-to-br from-nwt-light-teal to-nwt-dark-teal relative overflow-hidden">
-              <div className="absolute inset-0 bg-black/20" />
-              {/* Subtle texture overlay */}
-              <div
-                className="absolute inset-0 opacity-10"
-                style={{
-                  backgroundImage: `radial-gradient(circle at 2px 2px, rgba(0,0,0,0.3) 1px, transparent 0)`,
-                  backgroundSize: "15px 15px",
-                }}
-              />
+              {therapist.primaryPhoto ? (
+                <Image
+                  src={urlFor(therapist.primaryPhoto).width(600).height(750).url()}
+                  alt={therapist.name}
+                  fill
+                  className="object-cover"
+                />
+              ) : (
+                <>
+                  <div className="absolute inset-0 bg-black/20" />
+                  {/* Subtle texture overlay */}
+                  <div
+                    className="absolute inset-0 opacity-10"
+                    style={{
+                      backgroundImage: `radial-gradient(circle at 2px 2px, rgba(0,0,0,0.3) 1px, transparent 0)`,
+                      backgroundSize: "15px 15px",
+                    }}
+                  />
+                </>
+              )}
             </div>
           </div>
 

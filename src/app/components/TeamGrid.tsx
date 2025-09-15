@@ -1,8 +1,10 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { client } from "@/sanity/client";
+import { urlFor } from "@/sanity/image";
 import BlockContent from "@sanity/block-content-to-react";
 
 interface TeamMember {
@@ -80,6 +82,7 @@ const TeamGrid = () => {
           credentials,
           bio,
           specializations,
+          previewPhoto,
           "slug": slug.current
         }`;
         const therapists = await client.fetch(query);
@@ -312,7 +315,17 @@ const TeamGrid = () => {
                           }
                         >
                           <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-gray-200 rounded-lg mx-auto mb-3 overflow-hidden">
-                            <div className="w-full h-full bg-gradient-to-br from-nwt-light-teal to-nwt-coral"></div>
+                            {member.previewPhoto ? (
+                              <Image
+                                src={urlFor(member.previewPhoto).width(112).height(112).url()}
+                                alt={member.name}
+                                width={112}
+                                height={112}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-gradient-to-br from-nwt-light-teal to-nwt-coral"></div>
+                            )}
                           </div>
                           <h3 className="font-bold text-white text-sm md:text-base mb-1">
                             {memberName}
