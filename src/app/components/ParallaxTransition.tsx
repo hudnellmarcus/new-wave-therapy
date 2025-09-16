@@ -1,14 +1,14 @@
 "use client";
-import { useEffect, useState, useRef } from 'react';
+import { useRef } from 'react';
 import { motion } from 'framer-motion';
 
 const ParallaxTransition = () => {
-  const [scrollY, setScrollY] = useState(0);
-  const [elementTop, setElementTop] = useState(0);
-  const [clientHeight, setClientHeight] = useState(0);
+// const [scrollY, setScrollY] = useState(0);
+// const [elementTop, setElementTop] = useState(0);
+// const [clientHeight, setClientHeight] = useState(0);
   const divRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+/*  useEffect(() => {
     const element = divRef.current;
     if (!element) return;
 
@@ -30,7 +30,7 @@ const ParallaxTransition = () => {
     onScroll();
 
     return () => window.removeEventListener('scroll', throttledScroll);
-  }, []);
+  }, []); */
 
   return (
     <div ref={divRef} className="relative h-screen overflow-hidden">

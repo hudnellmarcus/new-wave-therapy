@@ -307,7 +307,7 @@ const Resources = () => {
           <p className="text-nwt-dark-teal/80 leading-relaxed">
             These resources are provided for informational purposes and do not
             constitute medical advice. Please consult with your healthcare
-            provider before beginning any new treatment or therapy. If you're
+            provider before beginning any new treatment or therapy. If you&apos;re
             experiencing a mental health crisis, please call 988 (Suicide &
             Crisis Lifeline) or go to your nearest emergency room.
           </p>

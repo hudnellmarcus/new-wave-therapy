@@ -33,6 +33,7 @@ interface UnifiedTeamMember {
   license?: string;
   credentials?: string;
   slug?: string;
+  previewPhoto?: object;
 }
 
 interface SiteSettings {

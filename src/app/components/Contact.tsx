@@ -121,7 +121,7 @@ const Contact = () => {
             </motion.div>
             <h2 className="text-2xl font-bold text-nwt-dark-teal mb-4">Message Sent!</h2>
             <p className="text-nwt-dark-teal/70 mb-6">
-              Thank you for reaching out. We'll be in touch within 24 hours.
+              Thank you for reaching out. We&apos;ll be in touch within 24 hours.
             </p>
             <Button 
               variant="primary" 
@@ -490,7 +490,7 @@ const Contact = () => {
                     )}
                   </Button>
                   <p className="text-center text-xs text-nwt-dark-teal/50">
-                    You'll receive a confirmation email and we'll be in touch within 24 hours.
+                    You&apos;ll receive a confirmation email and we&apos;ll be in touch within 24 hours.
                   </p>
                 </div>
               </form>

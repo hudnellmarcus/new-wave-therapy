@@ -33,6 +33,7 @@ interface TherapistData {
   email: string;
   pronouns: string;
   slug: string;
+  primaryPhoto?: object;
 }
 
 interface RetroTeamMemberProps {

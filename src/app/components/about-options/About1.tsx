@@ -43,11 +43,11 @@ const AboutOption1 = () => {
           viewport={{ once: true, amount: 0.3 }}
         >
           <p className="text-xl md:text-2xl text-white/90 leading-relaxed font-medium">
-            At our practice, we believe that high-quality therapy should be both accessible and responsive to the 
-            realities of the world. That's why we offer low-fee and in-network options, making it possible for more 
-            people to engage in care without financial barriers. We've also built a team that reflects the diversity of the 
-            communities we serve. Every week, our clinicians come together in supervision to think collectively about 
-            our clients' care. That means you're not only working with one therapist—you're supported by the shared 
+            At our practice, we believe that high-quality therapy should be both accessible and responsive to the
+            realities of the world. That&apos;s why we offer low-fee and in-network options, making it possible for more
+            people to engage in care without financial barriers. We&apos;ve also built a team that reflects the diversity of the
+            communities we serve. Every week, our clinicians come together in supervision to think collectively about
+            our clients&apos; care. That means you&apos;re not only working with one therapist—you&apos;re supported by the shared 
             knowledge and accountability of seven. In a world where isolation and inequity are real, we believe 
             healing should be <span className="text-nwt-peach font-bold">communal</span>, <span className="text-nwt-coral font-bold">affordable</span>, and <span className="text-nwt-light-teal font-bold">grounded in representation</span>.
           </p>

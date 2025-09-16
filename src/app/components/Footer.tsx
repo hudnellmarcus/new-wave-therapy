@@ -41,7 +41,7 @@ const Footer = () => {
                 New Wave Therapy
               </h3>
               <p className="text-white/80 leading-relaxed max-w-md">
-                Providing compassionate, evidence-based therapy services to support your mental health journey. Our team is here to help you navigate life's challenges with care and understanding.
+                Providing compassionate, evidence-based therapy services to support your mental health journey. Our team is here to help you navigate life&apos;s challenges with care and understanding.
               </p>
             </div>
             
@@ -127,7 +127,7 @@ const Footer = () => {
             <div className="mt-6">
               <h5 className="text-sm font-semibold mb-2 text-nwt-coral">Emergency Resources</h5>
               <p className="text-xs text-white/70 leading-relaxed">
-                If you're experiencing a mental health crisis, please call 988 (Suicide & Crisis Lifeline) or go to your nearest emergency room.
+                If you&apos;re experiencing a mental health crisis, please call 988 (Suicide & Crisis Lifeline) or go to your nearest emergency room.
               </p>
             </div>
           </motion.div>
