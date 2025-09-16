@@ -103,12 +103,12 @@ const Contact = () => {
 
   if (submitSuccess) {
     return (
-      <section className="min-h-screen relative contact-stripe-cream-bg pt-16">
+      <section className="max-h-screen h-screen relative contact-stripe-cream-bg pt-12">
         <div className="absolute inset-0 bg-black/10 z-[2]"></div>
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="relative z-20 flex items-center justify-center min-h-screen px-4"
+          className="relative z-20 flex items-center justify-center h-full px-4"
         >
           <div className="bg-white/90 backdrop-blur-sm p-12 rounded-2xl border border-nwt-dark-teal/20 text-center max-w-md">
             <motion.div
@@ -136,27 +136,27 @@ const Contact = () => {
   }
 
   return (
-    <section className="min-h-screen relative contact-stripe-cream-bg pt-16">
+    <section className="flex relative contact-stripe-cream-bg pt-12">
       <div className="absolute inset-0 bg-black/10 z-[2]"></div>
-      
-      <div className="relative z-20 min-h-screen flex flex-col">
-        <div className="flex flex-col lg:flex-row min-h-screen">
+
+      <div className="relative z-20 h-full flex flex-col mx-auto">
+        <div className="flex flex-col lg:flex-row h-full">
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
             className="lg:w-2/5 bg-nwt-dark-teal/95 backdrop-blur-sm flex flex-col"
           >
-            <div className="p-8 lg:p-12 flex-1">
+            <div className="p-6 lg:p-8 flex-1">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="mb-12 text-center"
               >
-                <h1 className="font-family-orange-squash text-4xl lg:text-6xl font-bold mb-6 text-white">
+                <h1 className="font-family-orange-squash text-3xl lg:text-4xl font-bold mb-4 text-white">
                   Get In Touch
                 </h1>
-                <p className="text-lg lg:text-xl text-white/90 leading-relaxed max-w-md mx-auto">
+                <p className="text-base lg:text-lg text-white/90 leading-relaxed max-w-md mx-auto">
                   Ready to start your therapy journey? Our team is here to support you every step of the way.
                 </p>
               </motion.div>
@@ -238,19 +238,20 @@ const Contact = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
-            className="lg:w-3/5 bg-white/90 backdrop-blur-sm flex flex-col"
+            className="lg:w-[60vw] bg-white/90 backdrop-blur-sm flex flex-col"
           >
-            <div className="p-8 lg:p-12 flex-1">
+            <div className="p-6 lg:p-8 flex-1">
               <motion.h2 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="text-3xl font-bold text-nwt-dark-teal mb-8"
+                className="text-2xl font-bold text-nwt-dark-teal mb-6"
               >
                 Send Us a Message
               </motion.h2>
               
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="overflow-y-auto flex-1">
+                <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="firstName" className="block text-sm font-medium mb-2 text-nwt-dark-teal">
@@ -494,6 +495,7 @@ const Contact = () => {
                   </p>
                 </div>
               </form>
+              </div>
             </div>
           </motion.div>
         </div>

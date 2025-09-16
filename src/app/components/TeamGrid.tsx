@@ -255,20 +255,20 @@ const TeamGrid = () => {
       ref={sectionRef}
       className={`flex flex-col min-h-screen relative horizontal-stripe-cream-bg viewport-enter ${isInView ? "in-view" : ""}`}
     >
-      <div className="container pt-24 mx-auto my-auto px-6 max-w-7xl relative z-10">
+      <div className="container pt-16 mx-auto px-6 max-w-7xl relative z-10 h-full flex flex-col">
         {/* Content overlay that covers header and team grid */}
-        <div className="bg-black/25 backdrop-blur-sm rounded-3xl p-8 md:p-12">
-          <div className="text-center mb-16">
-            <h1 className="text-5xl font-bold font-family-orange-squash text-white mb-4">
+        <div className="bg-black/25 backdrop-blur-sm rounded-3xl p-6 md:p-8 flex-1 flex flex-col">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold font-family-orange-squash text-white mb-3">
               Our team of therapists
             </h1>
-            <p className="text-xl text-white/90 max-w-2xl mx-auto">
+            <p className="text-lg text-white/90 max-w-2xl mx-auto">
               {siteSettings?.teamDescription ||
                 "While you'll choose the therapist who feels like the best fit for you, each of our clinicians is supported by the insight and collaboration of our whole team—so you benefit from many perspectives, not just one."}
             </p>
           </div>
 
-          <div className="mb-16">
+          <div className="flex-1 overflow-y-auto mb-4">
           {(() => {
             const chunkMembers = (members: UnifiedTeamMember[]) => {
               const chunks: UnifiedTeamMember[][] = [];
@@ -296,7 +296,7 @@ const TeamGrid = () => {
                 {memberRows.map((row, rowIndex) => (
                   <div
                     key={rowIndex}
-                    className={`flex justify-center gap-10 ${rowIndex < memberRows.length - 1 ? "mb-8" : ""}`}
+                    className={`flex justify-center gap-6 ${rowIndex < memberRows.length - 1 ? "mb-6" : ""}`}
                   >
                     {row.map((member, index) => {
                       const memberId = member._id || member.id || index;
@@ -313,7 +313,7 @@ const TeamGrid = () => {
                             )
                           }
                         >
-                          <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-gray-200 rounded-lg mx-auto mb-3 overflow-hidden">
+                          <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-gray-200 rounded-lg mx-auto mb-2 overflow-hidden">
                             {member.previewPhoto ? (
                               <Image
                                 src={urlFor(member.previewPhoto).width(112).height(112).url()}

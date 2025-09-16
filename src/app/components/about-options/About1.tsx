@@ -42,7 +42,7 @@ const AboutOption1 = () => {
           transition={{ duration: 0.8, delay: 0.4 }}
           viewport={{ once: true, amount: 0.3 }}
         >
-          <p className="text-xl md:text-2xl text-white/90 leading-relaxed font-medium">
+          <p className="text-base md:text-xl 2xl:text-2xl text-white/90 leading-relaxed font-medium">
             At our practice, we believe that high-quality therapy should be both accessible and responsive to the
             realities of the world. That&apos;s why we offer low-fee and in-network options, making it possible for more
             people to engage in care without financial barriers. We&apos;ve also built a team that reflects the diversity of the

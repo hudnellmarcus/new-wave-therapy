@@ -27,9 +27,9 @@ const Footer = () => {
   return (
     <footer className="bg-nwt-dark-teal text-white relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-nwt-dark-teal via-nwt-navy to-nwt-dark-teal opacity-90"></div>
-      
-      <div className="relative z-10 container mx-auto px-4 py-12 lg:py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+
+      <div className="relative z-10 container mx-auto px-4 py-6 lg:py-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -37,24 +37,24 @@ const Footer = () => {
             className="lg:col-span-2"
           >
             <div className="mb-6">
-              <h3 className="font-family-orange-squash text-3xl font-bold mb-4 text-nwt-peach">
+              <h3 className="font-family-orange-squash text-xl font-bold mb-3 text-nwt-peach">
                 New Wave Therapy
               </h3>
-              <p className="text-white/80 leading-relaxed max-w-md">
+              <p className="text-sm text-white/80 leading-relaxed max-w-md">
                 Providing compassionate, evidence-based therapy services to support your mental health journey. Our team is here to help you navigate life&apos;s challenges with care and understanding.
               </p>
             </div>
             
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3 text-white/90">
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2 text-white/90 text-sm">
                 <PhoneIcon />
                 <span>(555) 123-4567</span>
               </div>
-              <div className="flex items-center space-x-3 text-white/90">
+              <div className="flex items-center space-x-2 text-white/90 text-sm">
                 <EmailIcon />
                 <span>hello@newwavetherapy.com</span>
               </div>
-              <div className="flex items-start space-x-3 text-white/90">
+              <div className="flex items-start space-x-2 text-white/90 text-sm">
                 <LocationIcon />
                 <div>
                   <p>123 Wellness Ave, Suite 200</p>
@@ -69,30 +69,30 @@ const Footer = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <h4 className="text-lg font-semibold mb-4 text-nwt-light-teal">Quick Links</h4>
-            <ul className="space-y-2">
+            <h4 className="text-base font-semibold mb-3 text-nwt-light-teal">Quick Links</h4>
+            <ul className="space-y-1">
               <li>
-                <Link href="/" className="text-white/80 hover:text-nwt-peach transition-colors">
+                <Link href="/" className="text-white/80 hover:text-nwt-peach transition-colors text-sm">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/team" className="text-white/80 hover:text-nwt-peach transition-colors">
+                <Link href="/team" className="text-white/80 hover:text-nwt-peach transition-colors text-sm">
                   Our Team
                 </Link>
               </li>
               <li>
-                <Link href="/resources" className="text-white/80 hover:text-nwt-peach transition-colors">
+                <Link href="/resources" className="text-white/80 hover:text-nwt-peach transition-colors text-sm">
                   Resources
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="text-white/80 hover:text-nwt-peach transition-colors">
+                <Link href="/faq" className="text-white/80 hover:text-nwt-peach transition-colors text-sm">
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-white/80 hover:text-nwt-peach transition-colors">
+                <Link href="/contact" className="text-white/80 hover:text-nwt-peach transition-colors text-sm">
                   Contact
                 </Link>
               </li>
@@ -104,8 +104,8 @@ const Footer = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <h4 className="text-lg font-semibold mb-4 text-nwt-light-teal">Office Hours</h4>
-            <div className="space-y-2 text-white/80">
+            <h4 className="text-base font-semibold mb-3 text-nwt-light-teal">Office Hours</h4>
+            <div className="space-y-1 text-white/80 text-sm">
               <div className="flex justify-between">
                 <span>Mon - Thu</span>
                 <span>9AM - 7PM</span>
@@ -124,8 +124,8 @@ const Footer = () => {
               </div>
             </div>
             
-            <div className="mt-6">
-              <h5 className="text-sm font-semibold mb-2 text-nwt-coral">Emergency Resources</h5>
+            <div className="mt-4">
+              <h5 className="text-xs font-semibold mb-1 text-nwt-coral">Emergency Resources</h5>
               <p className="text-xs text-white/70 leading-relaxed">
                 If you&apos;re experiencing a mental health crisis, please call 988 (Suicide & Crisis Lifeline) or go to your nearest emergency room.
               </p>
@@ -137,13 +137,13 @@ const Footer = () => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="border-t border-white/20 pt-8"
+          className="border-t border-white/20 pt-4"
         >
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-white/60 text-sm">
+            <p className="text-white/60 text-xs">
               © {currentYear} New Wave Therapy. All rights reserved.
             </p>
-            <div className="flex space-x-6 text-sm">
+            <div className="flex space-x-4 text-xs">
               <Link href="/privacy" className="text-white/60 hover:text-nwt-peach transition-colors">
                 Privacy Policy
               </Link>

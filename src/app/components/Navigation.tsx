@@ -6,33 +6,45 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 
 const Navigation = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === '/';
 
   useEffect(() => {
+    let scrollTimeout: NodeJS.Timeout;
+
     const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      const heroHeight = window.innerHeight;
-      setIsScrolled(scrollPosition > heroHeight * 0.5);
+      // Show nav immediately when scrolling
+      setIsScrolling(true);
+
+      // Clear existing timeout
+      clearTimeout(scrollTimeout);
+
+      // Hide nav after 2 seconds of no scrolling
+      scrollTimeout = setTimeout(() => {
+        setIsScrolling(false);
+      }, 2000);
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(scrollTimeout);
+    };
   }, []);
 
   return (
     <AnimatePresence>
-      {(isScrolled || !isHomePage) && (
+      {(!isHomePage || (isHomePage && isScrolling)) && (
         <motion.nav 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md"
+          className="fixed top-0 left-0 right-0 z-50 bg-black/60 backdrop-blur-md"
         >
-          <div className="container mx-auto px-6 py-4">
+          <div className="container mx-auto px-2 py-2">
             <div className="flex items-center justify-between">
               {/* Logo Section - Left Side */}
               <motion.div 

@@ -19,7 +19,7 @@ const Resources = () => {
   );
 
   return (
-    <section className="mt-12 min-h-screen py-16 relative overflow-hidden">
+    <section className="mt-12 h-auto py-12 relative overflow-hidden">
       <div className="absolute inset-0">
         <div 
           className="w-full h-full bg-cover bg-center bg-no-repeat"
@@ -34,7 +34,7 @@ const Resources = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <h1 className="font-family-orange-squash text-5xl md:text-7xl font-bold mb-6 text-white">
+          <h1 className="font-family-orange-squash text-3xl md:text-5xl font-bold mb-4 text-white">
             Resources
           </h1>
           <p className="md:text-xl font-medium max-w-3xl mx-auto">
@@ -49,12 +49,12 @@ const Resources = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="max-w-4xl mx-auto"
+          className="max-w-4xl mx-auto flex-1 overflow-y-auto"
         >
-          <div className="bg-white/60 backdrop-blur-sm rounded-2xl border border-nwt-dark-teal/20 p-8 lg:p-12 shadow-lg">
+          <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-nwt-dark-teal/20 p-8 lg:p-8 shadow-lg">
             <div className="space-y-8">
               <div>
-                <h2 className="text-2xl font-bold text-nwt-dark-teal mb-4">
+                <h2 className="text-2xl font-bold text-nwt-dark-teal mb-2">
                   Energy Work
                 </h2>
                 <ul className="space-y-2">
@@ -74,7 +74,7 @@ const Resources = () => {
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-nwt-dark-teal mb-4">
+                <h2 className="text-2xl font-bold text-nwt-dark-teal mb-2">
                   Ayurveda Clinician
                 </h2>
                 <ul className="space-y-2">
@@ -94,7 +94,7 @@ const Resources = () => {
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-nwt-dark-teal mb-4">
+                <h2 className="text-2xl font-bold text-nwt-dark-teal mb-2">
                   Retreats
                 </h2>
                 <ul className="space-y-2">
@@ -124,7 +124,7 @@ const Resources = () => {
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-nwt-dark-teal mb-4">
+                <h2 className="text-2xl font-bold text-nwt-dark-teal mb-2">
                   Meditation Group
                 </h2>
                 <ul className="space-y-2">
@@ -146,7 +146,7 @@ const Resources = () => {
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-nwt-dark-teal mb-4">
+                <h2 className="text-2xl font-bold text-nwt-dark-teal mb-2">
                   Financial Support
                 </h2>
                 <ul className="space-y-2">
@@ -301,10 +301,10 @@ const Resources = () => {
           transition={{ delay: 0.4 }}
           className="mt-12 bg-nwt-dark-teal/10 backdrop-blur-sm rounded-2xl p-8 text-center max-w-4xl mx-auto"
         >
-          <h3 className="text-xl font-bold text-nwt-dark-teal mb-4">
+          <h3 className="text-xl font-bold text-nwt-cream mb-4">
             Important Notice
           </h3>
-          <p className="text-nwt-dark-teal/80 leading-relaxed">
+          <p className="text-nwt-cream font-bold leading-relaxed">
             These resources are provided for informational purposes and do not
             constitute medical advice. Please consult with your healthcare
             provider before beginning any new treatment or therapy. If you&apos;re
