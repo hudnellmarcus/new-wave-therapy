@@ -76,22 +76,28 @@ const AboutOption2 = () => {
           </div>
         </div>
 
-        <div className="space-y-12">
+        <div className="space-y-8">
           {siteSettings.processSteps?.map((step, index) => {
             const colors = ['bg-nwt-light-teal text-black', 'bg-nwt-coral text-white', 'bg-nwt-peach text-black'];
             const titleColors = ['text-nwt-light-teal', 'text-nwt-coral', 'text-nwt-peach'];
-            const lineColors = ['bg-nwt-coral', 'bg-nwt-peach', ''];
+            const lineColors = ['bg-nwt-coral', 'bg-nwt-peach', 'bg-nwt-light-teal'];
+            const isLastStep = index === (siteSettings.processSteps?.length || 0) - 1;
             
             return (
               <div key={step.step} className="flex items-start gap-8 relative">
-                <div className={`flex-shrink-0 w-16 h-16 ${colors[index]} rounded-full flex items-center justify-center font-bold text-xl relative z-10`}>
-                  {step.step}
+                <div className="relative flex-shrink-0">
+                  <div className={`w-16 h-16 ${colors[index % colors.length]} rounded-full flex items-center justify-center font-bold text-xl relative z-10`}>
+                    {step.step}
+                  </div>
+                  
+                  {/* Connecting line - positioned to connect to next circle */}
+                  {!isLastStep && (
+                    <div className={`absolute left-8 top-16 w-0.5 h-20 ${lineColors[index % lineColors.length]} transform -translate-x-0.5`}></div>
+                  )}
                 </div>
-                {index < (siteSettings.processSteps?.length || 0) - 1 && (
-                  <div className={`absolute left-8 top-16 w-0.5 h-32 ${lineColors[index]}`}></div>
-                )}
-                <div className="pt-2">
-                  <h3 className={`text-2xl font-bold mb-3 ${titleColors[index]}`}>
+                
+                <div className="pt-2 flex-1">
+                  <h3 className={`text-2xl font-bold mb-3 ${titleColors[index % titleColors.length]}`}>
                     Step {step.step}
                   </h3>
                   <p className="text-gray-300 text-lg leading-relaxed">

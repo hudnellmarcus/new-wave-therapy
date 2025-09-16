@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useRef } from 'react';
+import { motion } from 'framer-motion';
 
 const ParallaxTransition = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -31,51 +32,57 @@ const ParallaxTransition = () => {
     return () => window.removeEventListener('scroll', throttledScroll);
   }, []);
 
-  const parallaxOffset = (scrollY - elementTop + clientHeight) * 0.5;
-  const parallaxOffsetSlow = (scrollY - elementTop + clientHeight) * 0.3;
-  const parallaxOffsetFast = (scrollY - elementTop + clientHeight) * 0.8;
-
   return (
     <div ref={divRef} className="relative h-screen overflow-hidden">
+      {/* Simplified single gradient background */}
       <div 
-        className="absolute inset-0 parallax-bg-slow"
+        className="absolute inset-0"
         style={{
-          transform: `translate3d(0, ${parallaxOffsetSlow}px, 0)`,
-          willChange: 'transform'
+          background: `linear-gradient(to bottom, 
+            #000000 0%, 
+            #073E5C 25%, 
+            #7CC6BF 50%, 
+            #E9BF83 75%, 
+            #f2e4c2 100%
+          )`,
         }}
-      >
-        <div className="w-full h-[120%] bg-gradient-to-b from-black via-nwt-dark-teal/20 to-nwt-cream"></div>
-      </div>
+      />
       
-      <div 
-        className="absolute inset-0 parallax-bg-medium"
-        style={{
-          transform: `translate3d(0, ${parallaxOffset}px, 0)`,
-          willChange: 'transform'
-        }}
-      >
-        <div className="w-full h-[120%] bg-gradient-to-br from-transparent via-nwt-light-teal/10 to-nwt-coral/20"></div>
-      </div>
+      {/* Single subtle overlay */}
+      <div className="absolute inset-0 bg-black/5" />
 
-      <div 
-        className="absolute inset-0 parallax-bg-fast opacity-60"
-        style={{
-          transform: `translate3d(0, ${parallaxOffsetFast}px, 0)`,
-          willChange: 'transform'
-        }}
-      >
-        <div className="w-full h-[120%] bg-v-stripe-subtle"></div>
-      </div>
-
+      {/* Text content */}
       <div className="absolute inset-0 flex items-center justify-center z-10">
-        <div className="text-center text-white max-w-2xl mx-auto px-6">
-          <h2 className="text-6xl font-bold font-family-orange-squash mb-4 text-nwt-light-teal">
+        <motion.div 
+          className="text-center max-w-2xl mx-auto px-6"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-5xl md:text-6xl font-bold font-family-orange-squash mb-6 text-white">
             Meet Our Team
           </h2>
-          <p className="text-xl text-white/80">
+          <p className="text-lg md:text-xl leading-relaxed text-white/90">
             Experienced therapists ready to support your journey
           </p>
-        </div>
+        </motion.div>
+      </div>
+
+      {/* Simple scroll indicator */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
+        <motion.div
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="text-center"
+        >
+          <p className="text-sm mb-2 text-white/80">
+            Scroll to meet the team
+          </p>
+          <div className="w-6 h-6 mx-auto text-white/80">
+            ↓
+          </div>
+        </motion.div>
       </div>
     </div>
   );

@@ -252,24 +252,22 @@ const TeamGrid = () => {
   return (
     <section
       ref={sectionRef}
-      className={`flex flex-col min-h-screen relative bg-cover bg-center viewport-enter ${isInView ? "in-view" : ""}`}
-      style={{
-        backgroundImage: "url('backgrounds/horizontal_stripe_bg.jpeg')",
-      }}
+      className={`flex flex-col min-h-screen relative horizontal-stripe-cream-bg viewport-enter ${isInView ? "in-view" : ""}`}
     >
-      <div className="absolute bg-black/30 inset-0"></div>
       <div className="container pt-24 mx-auto my-auto px-6 max-w-7xl relative z-10">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold font-family-orange-squash text-nwt-light-teal mb-4">
-            Our team of therapists
-          </h1>
-          <p className="text-xl text-white/80 max-w-2xl mx-auto">
-            {siteSettings?.teamDescription ||
-              "While you'll choose the therapist who feels like the best fit for you, each of our clinicians is supported by the insight and collaboration of our whole team—so you benefit from many perspectives, not just one."}
-          </p>
-        </div>
+        {/* Content overlay that covers header and team grid */}
+        <div className="bg-black/25 backdrop-blur-sm rounded-3xl p-8 md:p-12">
+          <div className="text-center mb-16">
+            <h1 className="text-5xl font-bold font-family-orange-squash text-white mb-4">
+              Our team of therapists
+            </h1>
+            <p className="text-xl text-white/90 max-w-2xl mx-auto">
+              {siteSettings?.teamDescription ||
+                "While you'll choose the therapist who feels like the best fit for you, each of our clinicians is supported by the insight and collaboration of our whole team—so you benefit from many perspectives, not just one."}
+            </p>
+          </div>
 
-        <div className="mb-16">
+          <div className="mb-16">
           {(() => {
             const chunkMembers = (members: UnifiedTeamMember[]) => {
               const chunks: UnifiedTeamMember[][] = [];
@@ -327,12 +325,12 @@ const TeamGrid = () => {
                               <div className="w-full h-full bg-gradient-to-br from-nwt-light-teal to-nwt-coral"></div>
                             )}
                           </div>
-                          <h3 className="font-bold text-white text-sm md:text-base mb-1">
-                            {memberName}
-                          </h3>
-                          <p className="text-white/80 text-xs md:text-sm">
-                            {memberRole}
-                          </p>
+                            <h3 className="font-bold text-white text-sm md:text-base mb-1">
+                              {memberName}
+                            </h3>
+                            <p className="text-white/90 text-xs md:text-sm">
+                              {memberRole}
+                            </p>
                         </div>
                       );
                     })}
@@ -472,6 +470,7 @@ const TeamGrid = () => {
               </>
             );
           })()}
+          </div>
         </div>
       </div>
     </section>
