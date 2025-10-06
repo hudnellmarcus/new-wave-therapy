@@ -2,6 +2,11 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
 import BlockContent from "@sanity/block-content-to-react";
@@ -50,7 +55,17 @@ const TeamGrid = () => {
     UnifiedTeamMember[]
   >([]);
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -111,6 +126,9 @@ const TeamGrid = () => {
     fetchTherapists();
     fetchSiteSettings();
   }, []);
+  const displayMembers: UnifiedTeamMember[] =
+    sanityTeamMembers.length > 0 ? sanityTeamMembers : [];
+
   const teamMembers: TeamMember[] = [
     {
       id: 1,
@@ -271,101 +289,188 @@ const TeamGrid = () => {
             </p>
           </div>
 
-          <div className="flex-1 overflow-y-auto mb-4">
-          {(() => {
-            const chunkMembers = (members: UnifiedTeamMember[]) => {
-              const chunks: UnifiedTeamMember[][] = [];
-              let currentIndex = 0;
-              let isFivePersonRow = true;
+          <div className="flex-1 mb-4">
+            {isMobile ? (
+              <div className="relative h-full flex flex-col items-center justify-center py-8">
+                <style jsx global>{`
+                  .team-swiper .swiper-pagination {
+                    bottom: 0 !important;
+                  }
+                  .team-swiper .swiper-pagination-bullet {
+                    background: rgba(255, 255, 255, 0.3);
+                    width: 8px;
+                    height: 8px;
+                  }
+                  .team-swiper .swiper-pagination-bullet-active {
+                    background: #7CC6BF;
+                    width: 32px;
+                    border-radius: 4px;
+                  }
+                  .team-swiper .swiper-button-next,
+                  .team-swiper .swiper-button-prev {
+                    color: white;
+                    background: rgba(255, 255, 255, 0.1);
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                  }
+                  .team-swiper .swiper-button-next:after,
+                  .team-swiper .swiper-button-prev:after {
+                    font-size: 20px;
+                  }
+                  .team-swiper .swiper-button-disabled {
+                    opacity: 0.3;
+                  }
+                `}</style>
+                <Swiper
+                  modules={[Navigation, Pagination]}
+                  spaceBetween={30}
+                  slidesPerView={1}
+                  navigation
+                  pagination={{ clickable: true }}
+                  className="team-swiper w-full max-w-sm pb-16"
+                >
+                  {displayMembers.map((member, index) => {
+                    const memberId = member._id || member.id || index;
+                    const memberName = member.name;
+                    const memberRole = member.title || member.role;
 
-              while (currentIndex < members.length) {
-                const chunkSize = isFivePersonRow ? 5 : 4;
-                chunks.push(
-                  members.slice(currentIndex, currentIndex + chunkSize)
-                );
-                currentIndex += chunkSize;
-                isFivePersonRow = !isFivePersonRow;
-              }
-
-              return chunks;
-            };
-
-            const displayMembers: UnifiedTeamMember[] =
-              sanityTeamMembers.length > 0 ? sanityTeamMembers : teamMembers;
-            const memberRows = chunkMembers(displayMembers);
-
-            return (
-              <>
-                {memberRows.map((row, rowIndex) => (
-                  <div
-                    key={rowIndex}
-                    className={`flex justify-center gap-6 ${rowIndex < memberRows.length - 1 ? "mb-6" : ""}`}
-                  >
-                    {row.map((member, index) => {
-                      const memberId = member._id || member.id || index;
-                      const memberName = member.name;
-                      const memberRole = member.title || member.role;
-
-                      return (
-                        <div
-                          key={memberId}
-                          className="text-center cursor-pointer transition-transform duration-300 hover:scale-110"
-                          onClick={() =>
-                            setExpandedMember(
-                              expandedMember === memberId ? null : memberId
-                            )
-                          }
-                        >
-                          <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-gray-200 rounded-lg mx-auto mb-2 overflow-hidden">
-                            {member.previewPhoto ? (
-                              <img
-                                src={urlFor(member.previewPhoto)
-                                  .width(400)    
-                                  .url()}
-                                alt={member.name}
-                                className="w-full h-full object-cover object-top"
-                              />
-                            ) : (
-                              <div className="w-full h-full bg-gradient-to-br from-nwt-light-teal to-nwt-coral"></div>
-                            )}
-                          </div>
-                            <h3 className="font-bold text-white text-sm md:text-base mb-1">
+                    return (
+                      <SwiperSlide key={memberId}>
+                        <div className="flex flex-col items-center px-4">
+                          <div className="text-center">
+                            <div className="w-48 h-48 bg-gray-200 rounded-2xl mx-auto mb-4 overflow-hidden shadow-lg">
+                              {member.previewPhoto ? (
+                                <img
+                                  src={urlFor(member.previewPhoto).width(400).url()}
+                                  alt={member.name}
+                                  className="w-full h-full object-cover object-top"
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-gradient-to-br from-nwt-light-teal to-nwt-coral"></div>
+                              )}
+                            </div>
+                            <h3 className="font-bold text-white text-xl mb-2">
                               {memberName}
                             </h3>
-                            <p className="text-white/90 text-xs md:text-sm">
+                            <p className="text-white/90 text-base mb-4">
                               {memberRole}
                             </p>
+                            <button
+                              className="bg-nwt-light-teal hover:bg-nwt-light-teal/90 text-black px-6 py-2 rounded-lg font-semibold transition-colors"
+                              onClick={() => setExpandedMember(memberId)}
+                            >
+                              View Profile
+                            </button>
+                          </div>
                         </div>
+                      </SwiperSlide>
+                    );
+                  })}
+                </Swiper>
+              </div>
+            ) : (
+              <div className="overflow-y-auto">
+                {(() => {
+                  const chunkMembers = (members: UnifiedTeamMember[]) => {
+                    const chunks: UnifiedTeamMember[][] = [];
+                    let currentIdx = 0;
+                    let isFivePersonRow = true;
+
+                    while (currentIdx < members.length) {
+                      const chunkSize = isFivePersonRow ? 5 : 4;
+                      chunks.push(
+                        members.slice(currentIdx, currentIdx + chunkSize)
                       );
-                    })}
-                  </div>
-                ))}
+                      currentIdx += chunkSize;
+                      isFivePersonRow = !isFivePersonRow;
+                    }
 
-                {/* Expanded Bio Section */}
-                <AnimatePresence>
-                  {expandedMember && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ duration: 0.4, ease: "easeOut" }}
-                      className="fixed inset-0 z-50 flex items-center justify-center p-6 pt-20"
-                      onClick={() => setExpandedMember(null)}
-                    >
-                      <div
-                        className="bg-black/80 backdrop-blur-md rounded-3xl p-8 border border-white/20 max-w-4xl w-full max-h-[80vh] overflow-y-auto"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {(() => {
-                          const member = displayMembers.find(
-                            (m) =>
-                              (m._id || m.id || displayMembers.indexOf(m)) ===
-                              expandedMember
-                          );
-                          if (!member) return null;
+                    return chunks;
+                  };
 
-                          return (
-                            <div className="max-w-4xl mx-auto">
+                  const memberRows = chunkMembers(displayMembers);
+
+                  return (
+                    <>
+                      {memberRows.map((row, rowIndex) => (
+                        <div
+                          key={rowIndex}
+                          className={`flex justify-center gap-6 ${rowIndex < memberRows.length - 1 ? "mb-6" : ""}`}
+                        >
+                          {row.map((member, index) => {
+                            const memberId = member._id || member.id || index;
+                            const memberName = member.name;
+                            const memberRole = member.title || member.role;
+
+                            return (
+                              <div
+                                key={memberId}
+                                className="text-center cursor-pointer transition-transform duration-300 hover:scale-110"
+                                onClick={() =>
+                                  setExpandedMember(
+                                    expandedMember === memberId ? null : memberId
+                                  )
+                                }
+                              >
+                                <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-gray-200 rounded-lg mx-auto mb-2 overflow-hidden">
+                                  {member.previewPhoto ? (
+                                    <img
+                                      src={urlFor(member.previewPhoto)
+                                        .width(400)
+                                        .url()}
+                                      alt={member.name}
+                                      className="w-full h-full object-cover object-top"
+                                    />
+                                  ) : (
+                                    <div className="w-full h-full bg-gradient-to-br from-nwt-light-teal to-nwt-coral"></div>
+                                  )}
+                                </div>
+                                  <h3 className="font-bold text-white text-sm md:text-base mb-1">
+                                    {memberName}
+                                  </h3>
+                                  <p className="text-white/90 text-xs md:text-sm">
+                                    {memberRole}
+                                  </p>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ))}
+                    </>
+                  );
+                })()}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Expanded Bio Section */}
+      <AnimatePresence>
+        {expandedMember && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-6 pt-20"
+            onClick={() => setExpandedMember(null)}
+          >
+            <div
+              className="bg-black/80 backdrop-blur-md rounded-3xl p-8 border border-white/20 max-w-4xl w-full max-h-[80vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {(() => {
+                const member = displayMembers.find(
+                  (m) =>
+                    (m._id || m.id || displayMembers.indexOf(m)) ===
+                    expandedMember
+                );
+                if (!member) return null;
+
+                return (
+                  <div className="max-w-4xl mx-auto">
                               <div className="flex justify-between items-start mb-6">
                                 <div className="flex items-center gap-4">
                                   {member.previewPhoto && (
@@ -479,20 +584,14 @@ const TeamGrid = () => {
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                            </div>
-                          );
-                        })()}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </>
-            );
-          })()}
-          </div>
-        </div>
-      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
