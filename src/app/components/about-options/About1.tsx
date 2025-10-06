@@ -1,22 +1,52 @@
 "use client";
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { client } from "@/sanity/client";
+
+interface AboutPageData {
+  uniqueApproachHeadline: string;
+  mainDescription: string;
+  collaboration: string;
+  diversity: string;
+  financialSupport: string;
+}
 
 const AboutOption1 = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [aboutPage, setAboutPage] = useState<AboutPageData | null>(null);
+
+  useEffect(() => {
+    const fetchAboutPage = async () => {
+      try {
+        const query = `*[_type == "aboutPage"][0] {
+          uniqueApproachHeadline,
+          mainDescription,
+          collaboration,
+          diversity,
+          financialSupport
+        }`;
+        const data = await client.fetch<AboutPageData>(query);
+        setAboutPage(data);
+      } catch (error) {
+        console.log('Failed to fetch about page:', error);
+      }
+    };
+
+    fetchAboutPage();
+  }, []);
 
   const pillars = [
     {
       title: "Collaboration",
-      description: "Every week, our clinicians come together in supervision to think collectively about our clients' care. You're supported by the shared knowledge of our entire team."
+      description: aboutPage?.collaboration || "We meet as a group every week to witness to your progress, and to address places in which you might be getting stuck. This is a growth mindset organization, and we are invested in a multi pronged and creative approach to your well being."
     },
     {
-      title: "Diversity", 
-      description: "We've built a team that reflects the diversity of the communities we serve, ensuring representation and understanding in your care."
+      title: "Diversity",
+      description: aboutPage?.diversity || "We know no single group can represent everyone, but we've assembled our team with care—considering race, sexuality, family constellation, gender, culture, and immigration experience. Our goal is for you to see parts of yourself reflected and feel a deeper sense of belonging."
     },
     {
       title: "Financial Support",
-      description: "We offer low-fee and in-network options, making high-quality therapy accessible without financial barriers."
+      description: aboutPage?.financialSupport || "Along with offering low fees and in network options to our clients, we believe in fairly supporting the associates who provide this care. That's why they receive 80% of the fees from their sessions—so you can feel confident knowing your therapist is valued as they walk alongside you."
     }
   ];
 
@@ -43,13 +73,7 @@ const AboutOption1 = () => {
           viewport={{ once: true, amount: 0.3 }}
         >
           <p className="text-base md:text-xl 2xl:text-2xl text-white/90 leading-relaxed font-medium">
-            At our practice, we believe that high-quality therapy should be both accessible and responsive to the
-            realities of the world. That&apos;s why we offer low-fee and in-network options, making it possible for more
-            people to engage in care without financial barriers. We&apos;ve also built a team that reflects the diversity of the
-            communities we serve. Every week, our clinicians come together in supervision to think collectively about
-            our clients&apos; care. That means you&apos;re not only working with one therapist—you&apos;re supported by the shared 
-            knowledge and accountability of seven. In a world where isolation and inequity are real, we believe 
-            healing should be <span className="text-nwt-peach font-bold">communal</span>, <span className="text-nwt-coral font-bold">affordable</span>, and <span className="text-nwt-light-teal font-bold">grounded in representation</span>.
+            At our practice, we believe therapy should be both accessible and deeply connected to the realities of everyday life. We keep care affordable by offering low-fee and in-network options, so fewer people are turned away by financial barriers. Our team reflects the diversity of the communities we serve, and each week our clinicians meet in supervision to think together about how to best support clients. When you work with one of us, you&apos;re also held by the collective knowledge and care of our whole team. In a world where isolation and inequity are real, we strive to make healing <span className="text-nwt-peach font-bold">communal</span>, <span className="text-nwt-coral font-bold">affordable</span>, and <span className="text-nwt-light-teal font-bold">grounded in representation</span>.
           </p>
         </motion.div>
 

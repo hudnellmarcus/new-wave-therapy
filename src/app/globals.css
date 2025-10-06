@@ -196,22 +196,6 @@
   position: relative;
 }
 
-.bg-v-stripe-overlay::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url('/backgrounds/v-stripe_bg.jpeg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  opacity: 0.3;
-  pointer-events: none;
-  z-index: -1;
-}
-
 .bg-stripe-overlay-light {
   position: relative;
   background-color: black;
