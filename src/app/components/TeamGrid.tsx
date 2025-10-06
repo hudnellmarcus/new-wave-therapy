@@ -28,10 +28,12 @@ interface UnifiedTeamMember {
   description?: string;
   image?: string;
   bio: string | unknown;
+  previewBio?: string;
   specializations: string[];
   education?: string;
   license?: string;
   credentials?: string;
+  identityExperience?: string[];
   slug?: string;
   previewPhoto?: object;
 }
@@ -82,7 +84,9 @@ const TeamGrid = () => {
           title,
           credentials,
           bio,
+          previewBio,
           specializations,
+          identityExperience,
           previewPhoto,
           "slug": slug.current
         }`;
@@ -313,14 +317,14 @@ const TeamGrid = () => {
                             )
                           }
                         >
-                          <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-gray-200 rounded-lg mx-auto mb-2 overflow-hidden">
+                          <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-gray-200 rounded-lg mx-auto mb-2 overflow-hidden">
                             {member.previewPhoto ? (
-                              <Image
-                                src={urlFor(member.previewPhoto).width(112).height(112).url()}
+                              <img
+                                src={urlFor(member.previewPhoto)
+                                  .width(400)    
+                                  .url()}
                                 alt={member.name}
-                                width={112}
-                                height={112}
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover object-top"
                               />
                             ) : (
                               <div className="w-full h-full bg-gradient-to-br from-nwt-light-teal to-nwt-coral"></div>
@@ -364,13 +368,24 @@ const TeamGrid = () => {
                           return (
                             <div className="max-w-4xl mx-auto">
                               <div className="flex justify-between items-start mb-6">
-                                <div>
-                                  <h2 className="text-3xl font-bold text-white mb-2">
-                                    {member.name}
-                                  </h2>
-                                  <p className="text-xl text-nwt-light-teal">
-                                    {member.title || member.role}
-                                  </p>
+                                <div className="flex items-center gap-4">
+                                  {member.previewPhoto && (
+                                    <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+                                      <img
+                                        src={urlFor(member.previewPhoto).width(240).url()}
+                                        alt={member.name}
+                                        className="w-full h-full object-cover object-top"
+                                      />
+                                    </div>
+                                  )}
+                                  <div>
+                                    <h2 className="text-3xl font-bold text-white mb-2">
+                                      {member.name}
+                                    </h2>
+                                    <p className="text-xl text-nwt-light-teal">
+                                      {member.title || member.role}
+                                    </p>
+                                  </div>
                                 </div>
                                 <button
                                   onClick={() => setExpandedMember(null)}
@@ -386,7 +401,9 @@ const TeamGrid = () => {
                                     About
                                   </h3>
                                   <div className="text-white/90 leading-relaxed mb-6">
-                                    {member.bio && Array.isArray(member.bio) ? (
+                                    {member.previewBio ? (
+                                      <p>{member.previewBio}</p>
+                                    ) : member.bio && Array.isArray(member.bio) ? (
                                       <BlockContent
                                         blocks={member.bio}
                                         serializers={{
@@ -440,15 +457,18 @@ const TeamGrid = () => {
 
                                 <div className="flex-1 flex flex-col items-center">
                                   <div className="flex-1">
-                                    <h3 className="text-xl font-bold text-white mb-4">
-                                      Background
-                                    </h3>
-                                    <div className="space-y-3 text-white/90">
-                                      <p>
-                                        {member.education || member.credentials}
-                                      </p>
-                                      <p>{member.license}</p>
-                                    </div>
+                                    {member.identityExperience && member.identityExperience.filter((item: string) => item && item.trim()).length > 0 && (
+                                      <>
+                                        <h3 className="text-xl font-bold text-white mb-4">
+                                          Identity Experience
+                                        </h3>
+                                        <div className="space-y-2 text-white/90">
+                                          {member.identityExperience.filter((item: string) => item && item.trim()).map((item: string, index: number) => (
+                                            <p key={index}>{item}</p>
+                                          ))}
+                                        </div>
+                                      </>
+                                    )}
 
                                     <div className="mt-6">
                                       <Link

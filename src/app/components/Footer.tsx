@@ -1,9 +1,42 @@
 "use client";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { client } from "@/sanity/client";
+
+interface SiteSettings {
+  phone: string;
+  email: string;
+  addressLine1: string;
+  addressLine2: string;
+  supervisorName: string;
+  supervisorUrl: string;
+}
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
+
+  useEffect(() => {
+    const fetchSiteSettings = async () => {
+      try {
+        const query = `*[_type == "siteSettings"][0] {
+          phone,
+          email,
+          addressLine1,
+          addressLine2,
+          supervisorName,
+          supervisorUrl
+        }`;
+        const settings = await client.fetch<SiteSettings>(query);
+        setSiteSettings(settings);
+      } catch (error) {
+        console.log('Failed to fetch site settings:', error);
+      }
+    };
+
+    fetchSiteSettings();
+  }, []);
 
   const PhoneIcon = () => (
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -36,30 +69,40 @@ const Footer = () => {
             transition={{ duration: 0.6 }}
             className="lg:col-span-2"
           >
-            <div className="mb-6">
-              <h3 className="font-family-orange-squash text-xl font-bold mb-3 text-nwt-peach">
-                New Wave Therapy
-              </h3>
-              <p className="text-sm text-white/80 leading-relaxed max-w-md">
-                Providing compassionate, evidence-based therapy services to support your mental health journey. Our team is here to help you navigate life&apos;s challenges with care and understanding.
-              </p>
+            <div className="space-y-3">
+              <div>
+                <h3 className="font-family-orange-squash text-xl font-bold text-nwt-peach">
+                  New Wave Therapy
+                </h3>
+                <div className="text-sm text-white/90 leading-relaxed mt-2">
+                  <p>{siteSettings?.addressLine1 || '1225 Cypress Ave Suite 3 #V472'}</p>
+                  <p>{siteSettings?.addressLine2 || 'Los Angeles CA 90065'}</p>
+                </div>
+              </div>
+
+              <div className="text-sm text-white/90">
+                <p>
+                  Supervised by{' '}
+                  <a
+                    href={siteSettings?.supervisorUrl || 'https://www.halliegtherapy.com'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-nwt-light-teal hover:text-nwt-peach transition-colors underline"
+                  >
+                    {siteSettings?.supervisorName || 'Hallie Gnatovich, LMFT #52775'}
+                  </a>
+                </p>
+              </div>
             </div>
-            
-            <div className="space-y-2">
+
+            <div className="space-y-2 mt-6">
               <div className="flex items-center space-x-2 text-white/90 text-sm">
                 <PhoneIcon />
-                <span>(555) 123-4567</span>
+                <span>{siteSettings?.phone || '(781)-454-8409'}</span>
               </div>
               <div className="flex items-center space-x-2 text-white/90 text-sm">
                 <EmailIcon />
-                <span>hello@newwavetherapy.com</span>
-              </div>
-              <div className="flex items-start space-x-2 text-white/90 text-sm">
-                <LocationIcon />
-                <div>
-                  <p>123 Wellness Ave, Suite 200</p>
-                  <p>Your City, ST 12345</p>
-                </div>
+                <span>{siteSettings?.email || 'halliegtherapy@gmail.com'}</span>
               </div>
             </div>
           </motion.div>
@@ -104,32 +147,10 @@ const Footer = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <h4 className="text-base font-semibold mb-3 text-nwt-light-teal">Office Hours</h4>
-            <div className="space-y-1 text-white/80 text-sm">
-              <div className="flex justify-between">
-                <span>Mon - Thu</span>
-                <span>9AM - 7PM</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Friday</span>
-                <span>9AM - 5PM</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Saturday</span>
-                <span>10AM - 3PM</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Sunday</span>
-                <span>Closed</span>
-              </div>
-            </div>
-            
-            <div className="mt-4">
-              <h5 className="text-xs font-semibold mb-1 text-nwt-coral">Emergency Resources</h5>
-              <p className="text-xs text-white/70 leading-relaxed">
-                If you&apos;re experiencing a mental health crisis, please call 988 (Suicide & Crisis Lifeline) or go to your nearest emergency room.
-              </p>
-            </div>
+            <h4 className="text-base font-semibold mb-3 text-nwt-light-teal">Emergency Resources</h4>
+            <p className="text-sm text-white/80 leading-relaxed">
+              If you&apos;re experiencing a mental health crisis, please call 988 (Suicide & Crisis Lifeline) or go to your nearest emergency room.
+            </p>
           </motion.div>
         </div>
 

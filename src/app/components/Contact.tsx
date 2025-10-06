@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "./Button";
+import { client } from "@/sanity/client";
 
 interface FormData {
   firstName: string;
@@ -19,7 +20,13 @@ interface FormErrors {
   [key: string]: string;
 }
 
+interface SiteSettings {
+  phone: string;
+  email: string;
+}
+
 const Contact = () => {
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -35,6 +42,23 @@ const Contact = () => {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  useEffect(() => {
+    const fetchSiteSettings = async () => {
+      try {
+        const query = `*[_type == "siteSettings"][0] {
+          phone,
+          email
+        }`;
+        const settings = await client.fetch<SiteSettings>(query);
+        setSiteSettings(settings);
+      } catch (error) {
+        console.log('Failed to fetch site settings:', error);
+      }
+    };
+
+    fetchSiteSettings();
+  }, []);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -70,30 +94,6 @@ const Contact = () => {
     }
   };
 
-  const PhoneIcon = () => (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-    </svg>
-  );
-
-  const EmailIcon = () => (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-    </svg>
-  );
-
-  const LocationIcon = () => (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-    </svg>
-  );
-
-  const ClockIcon = () => (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  );
 
   const CheckIcon = () => (
     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -136,11 +136,11 @@ const Contact = () => {
   }
 
   return (
-    <section className="flex relative contact-stripe-cream-bg pt-12">
+    <section className="min-h-screen flex items-center justify-center relative contact-stripe-cream-bg py-12">
       <div className="absolute inset-0 bg-black/10 z-[2]"></div>
 
-      <div className="relative z-20 h-full flex flex-col mx-auto">
-        <div className="flex flex-col lg:flex-row h-full">
+      <div className="relative z-20 w-full max-w-6xl mx-auto px-6">
+        <div className="flex flex-col lg:flex-row shadow-2xl rounded-2xl overflow-hidden">
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -161,84 +161,21 @@ const Contact = () => {
                 </p>
               </motion.div>
               
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="space-y-8"
+                className="space-y-6"
               >
-                <div className="flex items-start space-x-4 group">
-                  <div className="w-12 h-12 bg-nwt-light-teal rounded-full flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                    <PhoneIcon />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2 text-white">Call Us</h3>
-                    <p className="text-white/80 mb-2">Speak directly with our intake coordinator</p>
-                    <p className="text-lg font-semibold text-nwt-peach">(555) 123-4567</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4 group">
-                  <div className="w-12 h-12 bg-nwt-coral rounded-full flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                    <EmailIcon />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2 text-white">Email Us</h3>
-                    <p className="text-white/80 mb-2">Send us your questions anytime</p>
-                    <p className="text-lg font-semibold text-nwt-peach">hello@newwavetherapy.com</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4 group">
-                  <div className="w-12 h-12 bg-nwt-peach rounded-full flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                    <LocationIcon />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2 text-white">Visit Us</h3>
-                    <p className="text-white/80 mb-2">Come see our welcoming space</p>
-                    <div className="text-nwt-peach">
-                      <p>123 Wellness Ave</p>
-                      <p>Suite 200</p>
-                      <p>Your City, ST 12345</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4 group">
-                  <div className="w-12 h-12 bg-nwt-mint rounded-full flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                    <ClockIcon />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2 text-white">Office Hours</h3>
-                    <div className="space-y-1 text-white/90">
-                      <div className="flex justify-between">
-                        <span>Monday - Thursday</span>
-                        <span>9:00 AM - 7:00 PM</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Friday</span>
-                        <span>9:00 AM - 5:00 PM</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Saturday</span>
-                        <span>10:00 AM - 3:00 PM</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Sunday</span>
-                        <span>Closed</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </motion.div>
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
-            className="lg:w-[60vw] bg-white/90 backdrop-blur-sm flex flex-col"
+            className="lg:w-3/5 bg-white/90 backdrop-blur-sm flex flex-col"
           >
             <div className="p-6 lg:p-8 flex-1">
               <motion.h2 
