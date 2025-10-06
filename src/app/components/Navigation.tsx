@@ -10,6 +10,7 @@ const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === '/';
+  const isLightPage = pathname === '/team' || pathname === '/contact';
 
   useEffect(() => {
     let scrollTimeout: NodeJS.Timeout;
@@ -37,12 +38,14 @@ const Navigation = () => {
   return (
     <AnimatePresence>
       {(!isHomePage || (isHomePage && isScrolling)) && (
-        <motion.nav 
+        <motion.nav
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="fixed top-0 left-0 right-0 z-50 bg-black/60 backdrop-blur-md"
+          className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md ${
+            isLightPage ? 'bg-nwt-dark-teal/95' : 'bg-black/60'
+          }`}
         >
           <div className="container mx-auto px-2 py-2">
             <div className="flex items-center justify-between">

@@ -136,10 +136,10 @@ const Contact = () => {
   }
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative contact-stripe-cream-bg py-12">
+    <section className="relative contact-stripe-cream-bg py-12">
       <div className="absolute inset-0 bg-black/10 z-[2]"></div>
 
-      <div className="relative z-20 w-full max-w-6xl mx-auto px-6">
+      <div className="relative z-20 w-full max-w-5xl mx-auto px-6">
         <div className="flex flex-col lg:flex-row shadow-2xl rounded-2xl overflow-hidden">
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
