@@ -1,8 +1,7 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "./Button";
-import { client } from "@/sanity/client";
 
 interface FormData {
   firstName: string;
@@ -20,13 +19,7 @@ interface FormErrors {
   [key: string]: string;
 }
 
-interface SiteSettings {
-  phone: string;
-  email: string;
-}
-
 const Contact = () => {
-  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -42,23 +35,6 @@ const Contact = () => {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-
-  useEffect(() => {
-    const fetchSiteSettings = async () => {
-      try {
-        const query = `*[_type == "siteSettings"][0] {
-          phone,
-          email
-        }`;
-        const settings = await client.fetch<SiteSettings>(query);
-        setSiteSettings(settings);
-      } catch (error) {
-        console.log('Failed to fetch site settings:', error);
-      }
-    };
-
-    fetchSiteSettings();
-  }, []);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
