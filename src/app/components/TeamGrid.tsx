@@ -11,18 +11,6 @@ import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
 import BlockContent from "@sanity/block-content-to-react";
 
-interface TeamMember {
-  id: number;
-  name: string;
-  role: string;
-  description: string;
-  image: string;
-  bio: string;
-  specializations: string[];
-  education: string;
-  license: string;
-}
-
 interface UnifiedTeamMember {
   id?: number;
   _id?: string;
