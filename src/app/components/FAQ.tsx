@@ -209,8 +209,7 @@ const FAQ = () => {
         if (groupedCategories.length > 0) {
           setExpandedSection(groupedCategories[0].title);
         }
-      } catch (error) {
-        console.log('Failed to fetch FAQs, using fallback data:', error);
+      } catch {
         // Keep existing fallback data structure
         setCategories(fallbackCategories);
         setExpandedSection("Insurance & Billing");

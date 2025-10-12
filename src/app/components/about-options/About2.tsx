@@ -15,7 +15,7 @@ interface AboutPageData {
   processSteps: ProcessStep[];
 }
 
-const AboutOption2 = () => {
+const About2 = () => {
   const [aboutPage, setAboutPage] = useState<AboutPageData | null>(null);
 
   useEffect(() => {
@@ -32,8 +32,7 @@ const AboutOption2 = () => {
         }`;
         const data = await client.fetch<AboutPageData>(query);
         setAboutPage(data);
-      } catch (error) {
-        console.log('Failed to fetch about page:', error);
+      } catch {
       }
     };
 
@@ -51,7 +50,7 @@ const AboutOption2 = () => {
           href="https://www.thegoodtrade.com/features/history-of-stripes/"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-nwt-light-teal hover:text-nwt-peach transition-colors underline"
+          className="text-nwt-light-teal hover:text-nwt-peach transition-colors underline-none"
         >
           stripe
         </a>
@@ -143,4 +142,4 @@ const AboutOption2 = () => {
   );
 };
 
-export default AboutOption2;
+export default About2;

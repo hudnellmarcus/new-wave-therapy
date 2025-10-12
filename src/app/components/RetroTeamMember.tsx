@@ -67,8 +67,7 @@ export default function RetroTeamMember({ therapistSlug }: RetroTeamMemberProps)
         }`;
         const therapistData = await client.fetch<TherapistData>(query, { slug: therapistSlug });
         setTherapist(therapistData);
-      } catch (error) {
-        console.log('Failed to fetch therapist:', error);
+      } catch {
       } finally {
         setLoading(false);
       }

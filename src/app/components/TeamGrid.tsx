@@ -2,11 +2,11 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
 import BlockContent from "@sanity/block-content-to-react";
@@ -28,6 +28,7 @@ interface UnifiedTeamMember {
   identityExperience?: string[];
   slug?: string;
   previewPhoto?: object;
+  website?: string;
 }
 
 interface SiteSettings {
@@ -42,6 +43,7 @@ const TeamGrid = () => {
   const [sanityTeamMembers, setSanityTeamMembers] = useState<
     UnifiedTeamMember[]
   >([]);
+  const [alumniMembers, setAlumniMembers] = useState<UnifiedTeamMember[]>([]);
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
@@ -51,8 +53,8 @@ const TeamGrid = () => {
       setIsMobile(window.innerWidth < 768);
     };
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   useEffect(() => {
@@ -94,9 +96,20 @@ const TeamGrid = () => {
         }`;
         const therapists = await client.fetch(query);
         setSanityTeamMembers(therapists);
-      } catch (error) {
-        console.log("Sanity fetch failed, using fallback data:", error);
-      }
+      } catch {}
+    };
+
+    const fetchAlumni = async () => {
+      try {
+        const query = `*[_type == "therapist" && isAlumni == true] | order(name asc) {
+          _id,
+          name,
+          credentials,
+          website
+        }`;
+        const alumni = await client.fetch(query);
+        setAlumniMembers(alumni);
+      } catch {}
     };
 
     const fetchSiteSettings = async () => {
@@ -106,17 +119,15 @@ const TeamGrid = () => {
         }`;
         const settings = await client.fetch<SiteSettings>(query);
         setSiteSettings(settings);
-      } catch (error) {
-        console.log("Failed to fetch site settings:", error);
-      }
+      } catch {}
     };
 
     fetchTherapists();
+    fetchAlumni();
     fetchSiteSettings();
   }, []);
   const displayMembers: UnifiedTeamMember[] =
     sanityTeamMembers.length > 0 ? sanityTeamMembers : [];
-
 
   return (
     <section
@@ -149,7 +160,7 @@ const TeamGrid = () => {
                     height: 8px;
                   }
                   .team-swiper .swiper-pagination-bullet-active {
-                    background: #7CC6BF;
+                    background: #7cc6bf;
                     width: 32px;
                     border-radius: 4px;
                   }
@@ -189,7 +200,9 @@ const TeamGrid = () => {
                             <div className="w-48 h-48 bg-gray-200 rounded-2xl mx-auto mb-4 overflow-hidden shadow-lg">
                               {member.previewPhoto ? (
                                 <img
-                                  src={urlFor(member.previewPhoto).width(400).url()}
+                                  src={urlFor(member.previewPhoto)
+                                    .width(400)
+                                    .url()}
                                   alt={member.name}
                                   className="w-full h-full object-cover object-top"
                                 />
@@ -256,7 +269,9 @@ const TeamGrid = () => {
                                 className="text-center cursor-pointer transition-transform duration-300 hover:scale-110"
                                 onClick={() =>
                                   setExpandedMember(
-                                    expandedMember === memberId ? null : memberId
+                                    expandedMember === memberId
+                                      ? null
+                                      : memberId
                                   )
                                 }
                               >
@@ -273,12 +288,12 @@ const TeamGrid = () => {
                                     <div className="w-full h-full bg-gradient-to-br from-nwt-light-teal to-nwt-coral"></div>
                                   )}
                                 </div>
-                                  <h3 className="font-bold text-white text-sm md:text-base mb-1">
-                                    {memberName}
-                                  </h3>
-                                  <p className="text-white/90 text-xs md:text-sm">
-                                    {memberRole}
-                                  </p>
+                                <h3 className="font-bold text-white text-sm md:text-base mb-1">
+                                  {memberName}
+                                </h3>
+                                <p className="text-white/90 text-xs md:text-sm">
+                                  {memberRole}
+                                </p>
                               </div>
                             );
                           })}
@@ -291,6 +306,36 @@ const TeamGrid = () => {
             )}
           </div>
         </div>
+
+        {alumniMembers.length > 0 && (
+          <div className="mt-8 mb-12 bg-black/50 backdrop-blur-sm rounded-3xl p-6 md:p-8">
+            <p className="text-center font-family-orange-squash text-white mb-8 text-base md:text-xl max-w-3xl mx-auto">
+              These are past associates of Hallie G Therapy, who are now
+              licensed and enjoying strong careers. Wonderful people and
+              phenomenal clinicians.
+            </p>
+            <div className="flex flex-wrap justify-center gap-x-10 gap-y-4">
+              {alumniMembers.map((alumni) => (
+                <div key={alumni._id} className="text-center">
+                  {alumni.website ? (
+                    <a
+                      href={alumni.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-nwt-cream hover:text-nwt-peach transition-colors text-lg md:text-xl font-medium"
+                    >
+                      {alumni.name}, {alumni.credentials}
+                    </a>
+                  ) : (
+                    <span className="text-lg md:text-xl font-medium font-family-orange-squash">
+                      {alumni.name}, {alumni.credentials}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Expanded Bio Section */}
@@ -318,119 +363,132 @@ const TeamGrid = () => {
 
                 return (
                   <div className="max-w-4xl mx-auto">
-                              <div className="flex justify-between items-start mb-6">
-                                <div className="flex items-center gap-4">
-                                  {member.previewPhoto && (
-                                    <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
-                                      <img
-                                        src={urlFor(member.previewPhoto).width(240).url()}
-                                        alt={member.name}
-                                        className="w-full h-full object-cover object-top"
-                                      />
-                                    </div>
-                                  )}
-                                  <div>
-                                    <h2 className="text-3xl font-bold text-white mb-2">
-                                      {member.name}
-                                    </h2>
-                                    <p className="text-xl text-nwt-light-teal">
-                                      {member.title || member.role}
-                                    </p>
-                                  </div>
+                    <div className="flex justify-between items-start mb-6">
+                      <div className="flex items-center gap-4">
+                        {member.previewPhoto && (
+                          <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+                            <img
+                              src={urlFor(member.previewPhoto).width(240).url()}
+                              alt={member.name}
+                              className="w-full h-full object-cover object-top"
+                            />
+                          </div>
+                        )}
+                        <div>
+                          <h2 className="text-3xl font-bold text-white mb-2">
+                            {member.name}
+                          </h2>
+                          <p className="text-xl text-nwt-light-teal">
+                            {member.title || member.role}
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => setExpandedMember(null)}
+                        className="text-white/60 hover:text-white text-2xl"
+                      >
+                        ×
+                      </button>
+                    </div>
+
+                    <div className="flex flex-col lg:flex-row gap-8 w-full">
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-white mb-4">
+                          About
+                        </h3>
+                        <div className="text-white/90 leading-relaxed mb-6">
+                          {member.previewBio ? (
+                            <p>{member.previewBio}</p>
+                          ) : member.bio && Array.isArray(member.bio) ? (
+                            <BlockContent
+                              blocks={member.bio}
+                              serializers={{
+                                types: {
+                                  block: (props: unknown) => {
+                                    const blockProps = props as {
+                                      children: React.ReactNode;
+                                    };
+                                    return (
+                                      <p className="mb-4 text-white/90">
+                                        {blockProps.children}
+                                      </p>
+                                    );
+                                  },
+                                },
+                                marks: {
+                                  strong: ({
+                                    children,
+                                  }: {
+                                    children: React.ReactNode;
+                                  }) => (
+                                    <strong className="font-bold text-white">
+                                      {children}
+                                    </strong>
+                                  ),
+                                  em: ({
+                                    children,
+                                  }: {
+                                    children: React.ReactNode;
+                                  }) => <em className="italic">{children}</em>,
+                                },
+                              }}
+                            />
+                          ) : typeof member.bio === "string" ? (
+                            <p>{member.bio}</p>
+                          ) : (
+                            <p>No bio available</p>
+                          )}
+                        </div>
+
+                        <h3 className="text-xl font-bold text-white mb-4">
+                          Specializations
+                        </h3>
+                        <div className="flex flex-wrap gap-2 mb-6">
+                          {member.specializations?.map(
+                            (spec: string, index: number) => (
+                              <span
+                                key={index}
+                                className="bg-nwt-coral/80 text-white px-3 py-1 rounded-full text-sm"
+                              >
+                                {spec}
+                              </span>
+                            )
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex-1 flex flex-col items-center">
+                        <div className="flex-1">
+                          {member.identityExperience &&
+                            member.identityExperience.filter(
+                              (item: string) => item && item.trim()
+                            ).length > 0 && (
+                              <>
+                                <h3 className="text-xl font-bold text-white mb-4">
+                                  Identity Experience
+                                </h3>
+                                <div className="space-y-2 text-white/90">
+                                  {member.identityExperience
+                                    .filter(
+                                      (item: string) => item && item.trim()
+                                    )
+                                    .map((item: string, index: number) => (
+                                      <p key={index}>{item}</p>
+                                    ))}
                                 </div>
-                                <button
-                                  onClick={() => setExpandedMember(null)}
-                                  className="text-white/60 hover:text-white text-2xl"
-                                >
-                                  ×
-                                </button>
-                              </div>
+                              </>
+                            )}
 
-                              <div className="flex flex-col lg:flex-row gap-8 w-full">
-                                <div className="flex-1">
-                                  <h3 className="text-xl font-bold text-white mb-4">
-                                    About
-                                  </h3>
-                                  <div className="text-white/90 leading-relaxed mb-6">
-                                    {member.previewBio ? (
-                                      <p>{member.previewBio}</p>
-                                    ) : member.bio && Array.isArray(member.bio) ? (
-                                      <BlockContent
-                                        blocks={member.bio}
-                                        serializers={{
-                                          types: {
-                                            block: (props: unknown) => {
-                                              const blockProps = props as { children: React.ReactNode };
-                                              return (
-                                                <p className="mb-4 text-white/90">
-                                                  {blockProps.children}
-                                                </p>
-                                              );
-                                            },
-                                          },
-                                          marks: {
-                                            strong: ({ children }: { children: React.ReactNode }) => (
-                                              <strong className="font-bold text-white">
-                                                {children}
-                                              </strong>
-                                            ),
-                                            em: ({ children }: { children: React.ReactNode }) => (
-                                              <em className="italic">
-                                                {children}
-                                              </em>
-                                            ),
-                                          },
-                                        }}
-                                      />
-                                    ) : typeof member.bio === "string" ? (
-                                      <p>{member.bio}</p>
-                                    ) : (
-                                      <p>No bio available</p>
-                                    )}
-                                  </div>
-
-                                  <h3 className="text-xl font-bold text-white mb-4">
-                                    Specializations
-                                  </h3>
-                                  <div className="flex flex-wrap gap-2 mb-6">
-                                    {member.specializations?.map(
-                                      (spec: string, index: number) => (
-                                        <span
-                                          key={index}
-                                          className="bg-nwt-coral/80 text-white px-3 py-1 rounded-full text-sm"
-                                        >
-                                          {spec}
-                                        </span>
-                                      )
-                                    )}
-                                  </div>
-                                </div>
-
-                                <div className="flex-1 flex flex-col items-center">
-                                  <div className="flex-1">
-                                    {member.identityExperience && member.identityExperience.filter((item: string) => item && item.trim()).length > 0 && (
-                                      <>
-                                        <h3 className="text-xl font-bold text-white mb-4">
-                                          Identity Experience
-                                        </h3>
-                                        <div className="space-y-2 text-white/90">
-                                          {member.identityExperience.filter((item: string) => item && item.trim()).map((item: string, index: number) => (
-                                            <p key={index}>{item}</p>
-                                          ))}
-                                        </div>
-                                      </>
-                                    )}
-
-                                    <div className="mt-6">
-                                      <Link
-                                        href={`/team/${member.slug || member.name?.toLowerCase().replace(/\s+/g, "-")}`}
-                                        className="inline-block bg-nwt-dark-teal hover:bg-nwt-dark-teal/90 text-white px-6 py-3 mt-20 rounded-lg font-semibold transition-colors"
-                                      >
-                                        See full profile
-                                      </Link>
-                                    </div>
-                                  </div>
-                                </div>
+                          <div className="mt-6">
+                            <Link
+                              href={`/team/${member.slug || member.name?.toLowerCase().replace(/\s+/g, "-")}`}
+                              className="inline-block bg-nwt-dark-teal hover:bg-nwt-dark-teal/90 text-white px-6 py-3 mt-20 rounded-lg font-semibold transition-colors"
+                            >
+                              See full profile
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 );

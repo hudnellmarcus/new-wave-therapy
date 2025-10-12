@@ -30,8 +30,7 @@ const Footer = () => {
         }`;
         const settings = await client.fetch<SiteSettings>(query);
         setSiteSettings(settings);
-      } catch (error) {
-        console.log('Failed to fetch site settings:', error);
+      } catch {
       }
     };
 

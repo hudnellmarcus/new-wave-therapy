@@ -51,7 +51,7 @@ const Resources = () => {
           transition={{ delay: 0.2 }}
           className="max-w-4xl mx-auto flex-1 overflow-y-auto"
         >
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-nwt-dark-teal/20 p-8 lg:p-8 shadow-lg">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-nwt-dark-teal/20 p-8 lg:p-8 shadow-lg">
             <div className="space-y-8">
               <div>
                 <h2 className="text-2xl font-bold text-nwt-dark-teal mb-2">

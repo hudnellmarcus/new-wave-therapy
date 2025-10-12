@@ -1,11 +1,11 @@
-import AboutOption1 from './about-options/About1';
-import AboutOption2 from './about-options/About2';
+import About1 from './about-options/About1';
+import About2 from './about-options/About2';
 
 const About = () => {
   return (
     <div className="bg-v-stripe-overlay">
-      <AboutOption1 />
-      <AboutOption2 />
+      <About1 />
+      <About2 />
     </div>
   );
 };

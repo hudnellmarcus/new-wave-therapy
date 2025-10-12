@@ -11,7 +11,7 @@ interface AboutPageData {
   financialSupport: string;
 }
 
-const AboutOption1 = () => {
+const About1 = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [aboutPage, setAboutPage] = useState<AboutPageData | null>(null);
 
@@ -27,8 +27,7 @@ const AboutOption1 = () => {
         }`;
         const data = await client.fetch<AboutPageData>(query);
         setAboutPage(data);
-      } catch (error) {
-        console.log('Failed to fetch about page:', error);
+      } catch {
       }
     };
 
@@ -119,4 +118,4 @@ const AboutOption1 = () => {
   );
 };
 
-export default AboutOption1;
+export default About1;
