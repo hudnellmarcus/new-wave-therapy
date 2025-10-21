@@ -131,6 +131,7 @@ const TeamGrid = () => {
 
   return (
     <section
+      id="team-section"
       ref={sectionRef}
       className={`flex flex-col min-h-screen relative horizontal-stripe-cream-bg viewport-enter ${isInView ? "in-view" : ""}`}
     >

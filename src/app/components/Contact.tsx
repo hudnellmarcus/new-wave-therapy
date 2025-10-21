@@ -58,9 +58,46 @@ const Contact = () => {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsSubmitting(false);
-    setSubmitSuccess(true);
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          access_key: "a1cf1858-e299-43cb-a69b-205fa6ce311c",
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+          phone: formData.phone,
+          contact_method: formData.contactMethod,
+          support_type: formData.supportType,
+          message: formData.message,
+          insurance: formData.insurance,
+          consent: formData.consent ? "Yes" : "No",
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          contactMethod: "",
+          supportType: "",
+          message: "",
+          insurance: "",
+          consent: false,
+        });
+        setSubmitSuccess(true);
+      } else {
+        alert("Failed to send message. Please try again.");
+      }
+    } catch (error) {
+      alert("An error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (field: keyof FormData, value: string | boolean) => {
@@ -175,7 +212,7 @@ const Contact = () => {
                       type="text"
                       value={formData.firstName}
                       onChange={(e) => handleInputChange("firstName", e.target.value)}
-                      className={`w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-nwt-dark-teal focus:border-transparent transition-all ${
+                      className={`w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-nwt-dark-teal focus:border-transparent transition-all text-gray-900 ${
                         errors.firstName ? "border-red-500" : "border-nwt-dark-teal/30"
                       }`}
                       aria-describedby={errors.firstName ? "firstName-error" : undefined}
@@ -204,7 +241,7 @@ const Contact = () => {
                       type="text"
                       value={formData.lastName}
                       onChange={(e) => handleInputChange("lastName", e.target.value)}
-                      className={`w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-nwt-dark-teal focus:border-transparent transition-all ${
+                      className={`w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-nwt-dark-teal focus:border-transparent transition-all text-gray-900 ${
                         errors.lastName ? "border-red-500" : "border-nwt-dark-teal/30"
                       }`}
                       aria-describedby={errors.lastName ? "lastName-error" : undefined}
@@ -234,7 +271,7 @@ const Contact = () => {
                     type="email"
                     value={formData.email}
                     onChange={(e) => handleInputChange("email", e.target.value)}
-                    className={`w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-nwt-dark-teal focus:border-transparent transition-all ${
+                    className={`w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-nwt-dark-teal focus:border-transparent transition-all text-gray-900 ${
                       errors.email ? "border-red-500" : "border-nwt-dark-teal/30"
                     }`}
                     aria-describedby={errors.email ? "email-error" : undefined}
@@ -263,7 +300,7 @@ const Contact = () => {
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => handleInputChange("phone", e.target.value)}
-                    className="w-full px-4 py-3 bg-white border border-nwt-dark-teal/30 rounded-lg focus:ring-2 focus:ring-nwt-dark-teal focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 bg-white border border-nwt-dark-teal/30 rounded-lg focus:ring-2 focus:ring-nwt-dark-teal focus:border-transparent transition-all text-gray-900"
                   />
                 </div>
 
@@ -292,11 +329,11 @@ const Contact = () => {
                   <label htmlFor="supportType" className="block text-sm font-medium mb-2 text-nwt-dark-teal">
                     Type of Support Needed
                   </label>
-                  <select 
+                  <select
                     id="supportType"
                     value={formData.supportType}
                     onChange={(e) => handleInputChange("supportType", e.target.value)}
-                    className="w-full px-4 py-3 bg-white border border-nwt-dark-teal/30 rounded-lg focus:ring-2 focus:ring-nwt-dark-teal focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 bg-white border border-nwt-dark-teal/30 rounded-lg focus:ring-2 focus:ring-nwt-dark-teal focus:border-transparent transition-all text-gray-900"
                   >
                     <option value="">Please select...</option>
                     <option value="individual">Individual Therapy</option>
@@ -317,7 +354,7 @@ const Contact = () => {
                     rows={4}
                     value={formData.message}
                     onChange={(e) => handleInputChange("message", e.target.value)}
-                    className={`w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-nwt-dark-teal focus:border-transparent transition-all resize-none ${
+                    className={`w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-nwt-dark-teal focus:border-transparent transition-all resize-none text-gray-900 ${
                       errors.message ? "border-red-500" : "border-nwt-dark-teal/30"
                     }`}
                     placeholder="Share what's bringing you to therapy and any specific concerns or goals you have..."
@@ -350,7 +387,7 @@ const Contact = () => {
                     type="text"
                     value={formData.insurance}
                     onChange={(e) => handleInputChange("insurance", e.target.value)}
-                    className="w-full px-4 py-3 bg-white border border-nwt-dark-teal/30 rounded-lg focus:ring-2 focus:ring-nwt-dark-teal focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 bg-white border border-nwt-dark-teal/30 rounded-lg focus:ring-2 focus:ring-nwt-dark-teal focus:border-transparent transition-all text-gray-900"
                     placeholder="e.g., Blue Cross Blue Shield, Aetna, etc."
                   />
                 </div>

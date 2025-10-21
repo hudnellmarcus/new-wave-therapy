@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 const Navigation = () => {
   const [isScrolling, setIsScrolling] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isInLightSection, setIsInLightSection] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === '/';
   const isLightPage = pathname === '/team' || pathname === '/contact';
@@ -16,13 +17,18 @@ const Navigation = () => {
     let scrollTimeout: NodeJS.Timeout;
 
     const handleScroll = () => {
-      // Show nav immediately when scrolling
       setIsScrolling(true);
 
-      // Clear existing timeout
+      if (isHomePage) {
+        const teamSection = document.getElementById('team-section');
+        if (teamSection) {
+          const rect = teamSection.getBoundingClientRect();
+          setIsInLightSection(rect.top <= 100);
+        }
+      }
+
       clearTimeout(scrollTimeout);
 
-      // Hide nav after 2 seconds of no scrolling
       scrollTimeout = setTimeout(() => {
         setIsScrolling(false);
       }, 2000);
@@ -33,7 +39,7 @@ const Navigation = () => {
       window.removeEventListener('scroll', handleScroll);
       clearTimeout(scrollTimeout);
     };
-  }, []);
+  }, [isHomePage]);
 
   return (
     <AnimatePresence>
@@ -44,7 +50,7 @@ const Navigation = () => {
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md ${
-            isLightPage ? 'bg-nwt-dark-teal/95' : 'bg-black/60'
+            isLightPage || isInLightSection ? 'bg-nwt-light-teal/95' : 'bg-black/60'
           }`}
         >
           <div className="container mx-auto px-2 py-2">
