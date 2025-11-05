@@ -4,6 +4,7 @@ import "./globals.css";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import OrganizationSchema from "./components/OrganizationSchema";
+import ServiceSchema from "./components/ServiceSchema";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -89,6 +90,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <OrganizationSchema />
+        <ServiceSchema />
         <Navigation />
         <main className="flex-1">
           {children}
