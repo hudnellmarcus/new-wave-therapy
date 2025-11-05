@@ -7,6 +7,7 @@ import { Phone, Mail, MapPin, Calendar, ArrowLeft } from "lucide-react"
 import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
 import BlockContent from '@sanity/block-content-to-react';
+import PersonSchema from "./PersonSchema";
 
 interface BadgeProps {
   children: React.ReactNode;
@@ -104,6 +105,16 @@ export default function RetroTeamMember({ therapistSlug }: RetroTeamMemberProps)
   }
   return (
     <main className="min-h-screen text-white relative bg-stripe-overlay-light">
+      <PersonSchema
+        name={therapist.name}
+        title={therapist.title}
+        credentials={therapist.credentials}
+        specializations={therapist.specializations}
+        slug={therapist.slug}
+        imageUrl={
+          therapist.primaryPhoto ? urlFor(therapist.primaryPhoto).url() : undefined
+        }
+      />
       {/* Background overlay */}
      {/* } <div className="absolute inset-0 bg-black/70 z-0" /> */ }
       {/* Subtle grain texture */}

@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
@@ -198,14 +199,16 @@ const TeamGrid = () => {
                       <SwiperSlide key={memberId}>
                         <div className="flex flex-col items-center px-4">
                           <div className="text-center">
-                            <div className="w-48 h-48 bg-gray-200 rounded-2xl mx-auto mb-4 overflow-hidden shadow-lg">
+                            <div className="w-48 h-48 bg-gray-200 rounded-2xl mx-auto mb-4 overflow-hidden shadow-lg relative">
                               {member.previewPhoto ? (
-                                <img
+                                <Image
                                   src={urlFor(member.previewPhoto)
                                     .width(400)
                                     .url()}
-                                  alt={member.name}
-                                  className="w-full h-full object-cover object-top"
+                                  alt={`${member.name}, ${member.title || member.role || "Therapist"}`}
+                                  fill
+                                  className="object-cover object-top"
+                                  sizes="(max-width: 768px) 192px, 192px"
                                 />
                               ) : (
                                 <div className="w-full h-full bg-gradient-to-br from-nwt-light-teal to-nwt-coral"></div>
@@ -276,14 +279,16 @@ const TeamGrid = () => {
                                   )
                                 }
                               >
-                                <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-gray-200 rounded-lg mx-auto mb-2 overflow-hidden">
+                                <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-gray-200 rounded-lg mx-auto mb-2 overflow-hidden relative">
                                   {member.previewPhoto ? (
-                                    <img
+                                    <Image
                                       src={urlFor(member.previewPhoto)
                                         .width(400)
                                         .url()}
-                                      alt={member.name}
-                                      className="w-full h-full object-cover object-top"
+                                      alt={`${member.name}, ${member.title || member.role || "Therapist"}`}
+                                      fill
+                                      className="object-cover object-top"
+                                      sizes="(max-width: 768px) 80px, (max-width: 1024px) 96px, 112px"
                                     />
                                   ) : (
                                     <div className="w-full h-full bg-gradient-to-br from-nwt-light-teal to-nwt-coral"></div>
@@ -367,11 +372,13 @@ const TeamGrid = () => {
                     <div className="flex justify-between items-start mb-6">
                       <div className="flex items-center gap-4">
                         {member.previewPhoto && (
-                          <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
-                            <img
+                          <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 relative">
+                            <Image
                               src={urlFor(member.previewPhoto).width(240).url()}
-                              alt={member.name}
-                              className="w-full h-full object-cover object-top"
+                              alt={`${member.name}, ${member.title || member.role || "Therapist"}`}
+                              fill
+                              className="object-cover object-top"
+                              sizes="80px"
                             />
                           </div>
                         )}
