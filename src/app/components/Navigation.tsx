@@ -50,7 +50,7 @@ const Navigation = () => {
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md ${
-            isLightPage || isInLightSection ? 'bg-nwt-light-teal/95' : 'bg-black/60'
+            isLightPage || isInLightSection ? 'bg-nwt-dark-teal/95' : 'bg-black/60'
           }`}
         >
           <div className="container mx-auto px-2 py-2">

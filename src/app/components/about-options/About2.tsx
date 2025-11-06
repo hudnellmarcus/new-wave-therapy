@@ -82,7 +82,18 @@ const About2 = () => {
             <p className="text-xl text-gray-300 leading-relaxed mb-8">
               {aboutPage.paragraphText || ""}
             </p>
-            <Button variant="secondary" size="lg">Begin Your Journey</Button>
+            <Button
+              variant="secondary"
+              size="lg"
+              onClick={() => {
+                const contactSection = document.getElementById('contact');
+                if (contactSection) {
+                  contactSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+            >
+              Begin Your Journey
+            </Button>
           </div>
 
           <div className="relative">
