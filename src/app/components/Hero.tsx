@@ -40,6 +40,9 @@ const Hero = () => {
       </motion.div>
 
       <div className="relative flex flex-col h-screen items-center justify-center -mt-16">
+        <h1 className="sr-only">
+          New Wave Therapy - Professional Virtual Therapy Services
+        </h1>
         <motion.div
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}

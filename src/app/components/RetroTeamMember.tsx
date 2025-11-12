@@ -1,10 +1,7 @@
-"use client";
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Button from "./Button"
 import Link from "next/link"
 import { Phone, Mail, MapPin, Calendar, ArrowLeft } from "lucide-react"
-import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
 import BlockContent from '@sanity/block-content-to-react';
 import PersonSchema from "./PersonSchema";
@@ -38,71 +35,10 @@ interface TherapistData {
 }
 
 interface RetroTeamMemberProps {
-  therapistSlug?: string;
+  therapist: TherapistData;
 }
 
-export default function RetroTeamMember({ therapistSlug }: RetroTeamMemberProps) {
-  const [therapist, setTherapist] = useState<TherapistData | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchTherapist = async () => {
-      if (!therapistSlug) {
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const query = `*[_type == "therapist" && slug.current == $slug][0] {
-          _id,
-          name,
-          title,
-          credentials,
-          bio,
-          specializations,
-          education,
-          email,
-          pronouns,
-          primaryPhoto,
-          "slug": slug.current
-        }`;
-        const therapistData = await client.fetch<TherapistData>(query, { slug: therapistSlug });
-        setTherapist(therapistData);
-      } catch {
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTherapist();
-  }, [therapistSlug]);
-
-  if (loading) {
-    return (
-      <main className="min-h-screen text-white relative bg-stripe-overlay-light">
-        <div className="relative z-10 max-w-5xl mx-auto px-6 py-16">
-          <div className="text-center">
-            <p className="text-gray-300">Loading...</p>
-          </div>
-        </div>
-      </main>
-    );
-  }
-
-  if (!therapist) {
-    return (
-      <main className="min-h-screen text-white relative bg-stripe-overlay-light">
-        <div className="relative z-10 max-w-5xl mx-auto px-6 py-16">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-white mb-4">Therapist Not Found</h1>
-            <Link href="/team" className="text-nwt-light-teal hover:underline">
-              Back to Team
-            </Link>
-          </div>
-        </div>
-      </main>
-    );
-  }
+export default function RetroTeamMember({ therapist }: RetroTeamMemberProps) {
   return (
     <main className="min-h-screen text-white relative bg-stripe-overlay-light">
       <PersonSchema
@@ -293,7 +229,7 @@ export default function RetroTeamMember({ therapistSlug }: RetroTeamMemberProps)
         {/* CTA */}
         <div className="text-center">
           <div className="bg-gradient-to-br from-nwt-dark-teal via-nwt-navy to-nwt-coral rounded-3xl p-12 md:p-16 border border-white/10">
-            <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">Let&apos;s Work Together</h3>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Let&apos;s Work Together</h2>
             <p className="text-xl text-white/90 mb-10 max-w-3xl mx-auto leading-relaxed">
               Ready to begin your healing journey? {therapist.pronouns ? `${therapist.pronouns.split('/')[0]} is` : 'I am'} here to provide compassionate, professional support tailored to your unique needs.
             </p>

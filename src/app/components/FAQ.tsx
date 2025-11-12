@@ -244,7 +244,6 @@ const FAQ = () => {
       <section className="py-16 relative">
         <div className="container mx-auto px-6 max-w-7xl relative z-10">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-white mb-4">Frequently Asked Questions</h1>
             <p className="text-xl text-white/80 max-w-2xl mx-auto">Loading FAQs...</p>
           </div>
         </div>

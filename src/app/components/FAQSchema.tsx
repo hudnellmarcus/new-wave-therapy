@@ -1,5 +1,3 @@
-"use client";
-import { useEffect, useState } from "react";
 import { client } from "@/sanity/client";
 
 interface FAQItem {
@@ -95,31 +93,25 @@ const fallbackFAQs: FAQItem[] = [
     },
 ];
 
-export default function FAQSchema() {
-  const [faqItems, setFaqItems] = useState<FAQItem[]>([]);
+export default async function FAQSchema() {
+  let faqItems: FAQItem[] = [];
 
-  useEffect(() => {
-    const fetchFAQs = async () => {
-      try {
-        const query = `*[_type == "faq" && isActive == true] | order(category->displayOrder asc, displayOrder asc) {
-          question,
-          answer
-        }`;
+  try {
+    const query = `*[_type == "faq" && isActive == true] | order(category->displayOrder asc, displayOrder asc) {
+      question,
+      answer
+    }`;
 
-        const faqs: FAQItem[] = await client.fetch(query);
+    const faqs: FAQItem[] = await client.fetch(query);
 
-        if (faqs && faqs.length > 0) {
-          setFaqItems(faqs);
-        } else {
-          setFaqItems(fallbackFAQs);
-        }
-      } catch {
-        setFaqItems(fallbackFAQs);
-      }
-    };
-
-    fetchFAQs();
-  }, []);
+    if (faqs && faqs.length > 0) {
+      faqItems = faqs;
+    } else {
+      faqItems = fallbackFAQs;
+    }
+  } catch {
+    faqItems = fallbackFAQs;
+  }
 
   if (faqItems.length === 0) {
     return null;

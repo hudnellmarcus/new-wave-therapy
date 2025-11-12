@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Link from "next/link";
 import RetroTeamMember from "../../components/RetroTeamMember";
 import { client } from "@/sanity/client";
 
@@ -64,7 +65,44 @@ const TherapistPage = async ({
   params: Promise<{ therapist: string }>;
 }) => {
   const { therapist } = await params;
-  return <RetroTeamMember therapistSlug={therapist} />;
+
+  const query = `*[_type == "therapist" && slug.current == $slug][0] {
+    _id,
+    name,
+    title,
+    credentials,
+    bio,
+    specializations,
+    education,
+    email,
+    pronouns,
+    primaryPhoto,
+    "slug": slug.current
+  }`;
+
+  const therapistData = await client.fetch(query, { slug: therapist });
+
+  if (!therapistData) {
+    return (
+      <main className="min-h-screen text-white relative bg-stripe-overlay-light">
+        <div className="relative z-10 max-w-5xl mx-auto px-6 py-16">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-white mb-4">
+              Therapist Not Found
+            </h1>
+            <Link
+              href="/team"
+              className="text-nwt-light-teal hover:underline"
+            >
+              Back to Team
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  return <RetroTeamMember therapist={therapistData} />;
 };
 
 export default TherapistPage;

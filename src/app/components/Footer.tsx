@@ -1,8 +1,6 @@
-"use client";
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { client } from "@/sanity/client";
+import FooterAnimationWrapper from "./FooterAnimationWrapper";
 
 interface SiteSettings {
   phone: string;
@@ -13,29 +11,24 @@ interface SiteSettings {
   supervisorUrl: string;
 }
 
-const Footer = () => {
+const Footer = async () => {
   const currentYear = new Date().getFullYear();
-  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
 
-  useEffect(() => {
-    const fetchSiteSettings = async () => {
-      try {
-        const query = `*[_type == "siteSettings"][0] {
-          phone,
-          email,
-          addressLine1,
-          addressLine2,
-          supervisorName,
-          supervisorUrl
-        }`;
-        const settings = await client.fetch<SiteSettings>(query);
-        setSiteSettings(settings);
-      } catch {
-      }
-    };
+  let siteSettings: SiteSettings | null = null;
 
-    fetchSiteSettings();
-  }, []);
+  try {
+    const query = `*[_type == "siteSettings"][0] {
+      phone,
+      email,
+      addressLine1,
+      addressLine2,
+      supervisorName,
+      supervisorUrl
+    }`;
+    siteSettings = await client.fetch<SiteSettings>(query);
+  } catch {
+    // Use fallback values if fetch fails
+  }
 
   const PhoneIcon = () => (
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -55,17 +48,12 @@ const Footer = () => {
 
       <div className="relative z-10 container mx-auto px-4 py-6 lg:py-8">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-2"
-          >
+          <FooterAnimationWrapper delay={0} className="lg:col-span-2">
             <div className="space-y-3">
               <div>
-                <h3 className="font-family-orange-squash text-xl font-bold text-nwt-peach">
+                <h2 className="font-family-orange-squash text-xl font-bold text-nwt-peach">
                   New Wave Therapy
-                </h3>
+                </h2>
                 <div className="text-sm text-white/90 leading-relaxed mt-2">
                   <p>{siteSettings?.addressLine1 || '1225 Cypress Ave Suite 3 #V472'}</p>
                   <p>{siteSettings?.addressLine2 || 'Los Angeles CA 90065'}</p>
@@ -97,14 +85,10 @@ const Footer = () => {
                 <span>{siteSettings?.email || 'halliegtherapy@gmail.com'}</span>
               </div>
             </div>
-          </motion.div>
+          </FooterAnimationWrapper>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            <h4 className="text-base font-semibold mb-3 text-nwt-light-teal">Quick Links</h4>
+          <FooterAnimationWrapper delay={0.1}>
+            <h3 className="text-base font-semibold mb-3 text-nwt-light-teal">Quick Links</h3>
             <ul className="space-y-1">
               <li>
                 <Link href="/" className="text-white/80 hover:text-nwt-peach transition-colors text-sm">
@@ -132,26 +116,17 @@ const Footer = () => {
                 </Link>
               </li>
             </ul>
-          </motion.div>
+          </FooterAnimationWrapper>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <h4 className="text-base font-semibold mb-3 text-nwt-light-teal">Emergency Resources</h4>
+          <FooterAnimationWrapper delay={0.2}>
+            <h3 className="text-base font-semibold mb-3 text-nwt-light-teal">Emergency Resources</h3>
             <p className="text-sm text-white/80 leading-relaxed">
               If you&apos;re experiencing a mental health crisis, please call 988 (Suicide & Crisis Lifeline) or go to your nearest emergency room.
             </p>
-          </motion.div>
+          </FooterAnimationWrapper>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="border-t border-white/20 pt-4"
-        >
+        <FooterAnimationWrapper delay={0.3} className="border-t border-white/20 pt-4">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-white/60 text-xs">
               © {currentYear} New Wave Therapy. All rights reserved.
@@ -166,7 +141,7 @@ const Footer = () => {
               <span className="text-white/60">HIPAA Compliant</span>
             </div>
           </div>
-        </motion.div>
+        </FooterAnimationWrapper>
       </div>
     </footer>
   );

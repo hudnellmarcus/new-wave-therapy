@@ -19,7 +19,12 @@ interface FormErrors {
   [key: string]: string;
 }
 
-const Contact = () => {
+interface ContactProps {
+  headingLevel?: "h1" | "h2";
+}
+
+const Contact = ({ headingLevel = "h1" }: ContactProps = {}) => {
+  const HeadingTag = headingLevel;
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -166,9 +171,9 @@ const Contact = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="mb-12 text-center"
               >
-                <h1 className="font-family-orange-squash text-3xl lg:text-4xl font-bold mb-4 text-white">
+                <HeadingTag className="font-family-orange-squash text-3xl lg:text-4xl font-bold mb-4 text-white">
                   Get In Touch
-                </h1>
+                </HeadingTag>
                 <p className="text-base lg:text-lg text-white/90 leading-relaxed max-w-md mx-auto">
                   Ready to start your therapy journey? Our team is here to support you every step of the way.
                 </p>

@@ -1,7 +1,7 @@
 import FAQ from "../components/FAQ";
 import FAQSchema from "../components/FAQSchema";
 
-export default function FAQPage() {
+export default async function FAQPage() {
   return (
     <div className="min-h-screen bg-stripe-fixed relative pt-20">
       <FAQSchema />

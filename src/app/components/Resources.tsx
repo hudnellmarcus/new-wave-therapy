@@ -301,9 +301,9 @@ const Resources = () => {
           transition={{ delay: 0.4 }}
           className="mt-12 bg-nwt-dark-teal/10 backdrop-blur-sm rounded-2xl p-8 text-center max-w-4xl mx-auto"
         >
-          <h3 className="text-xl font-bold text-nwt-cream mb-4">
+          <h2 className="text-xl font-bold text-nwt-cream mb-4">
             Important Notice
-          </h3>
+          </h2>
           <p className="text-nwt-cream font-bold leading-relaxed">
             These resources are provided for informational purposes and do not
             constitute medical advice. Please consult with your healthcare

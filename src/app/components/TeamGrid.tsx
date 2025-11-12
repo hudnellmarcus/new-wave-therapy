@@ -36,7 +36,12 @@ interface SiteSettings {
   teamDescription: string;
 }
 
-const TeamGrid = () => {
+interface TeamGridProps {
+  headingLevel?: "h1" | "h2";
+}
+
+const TeamGrid = ({ headingLevel = "h1" }: TeamGridProps = {}) => {
+  const HeadingTag = headingLevel;
   const [expandedMember, setExpandedMember] = useState<string | number | null>(
     null
   );
@@ -140,9 +145,9 @@ const TeamGrid = () => {
         {/* Content overlay that covers header and team grid */}
         <div className="bg-black/25 backdrop-blur-sm rounded-3xl p-6 md:p-8 flex-1 flex flex-col">
           <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold font-family-orange-squash text-white mb-3">
+            <HeadingTag className="text-3xl md:text-4xl font-bold font-family-orange-squash text-white mb-3">
               Our team of therapists
-            </h1>
+            </HeadingTag>
             <p className="text-lg text-white/90 max-w-2xl mx-auto">
               {siteSettings?.teamDescription ||
                 "While you'll choose the therapist who feels like the best fit for you, each of our clinicians is supported by the insight and collaboration of our whole team—so you benefit from many perspectives, not just one."}
@@ -315,6 +320,9 @@ const TeamGrid = () => {
 
         {alumniMembers.length > 0 && (
           <div className="mt-8 mb-12 bg-black/50 backdrop-blur-sm rounded-3xl p-6 md:p-8">
+            <h2 className="text-center font-family-orange-squash text-white mb-4 text-2xl md:text-3xl font-bold">
+              Alumni
+            </h2>
             <p className="text-center font-family-orange-squash text-white mb-8 text-base md:text-xl max-w-3xl mx-auto">
               These are past associates of Hallie G Therapy, who are now
               licensed and enjoying strong careers. Wonderful people and

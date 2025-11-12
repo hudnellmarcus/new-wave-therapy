@@ -28,8 +28,8 @@ const Home = () => {
       <Hero />
       <About />
       <ParallaxTransition />
-      <TeamGrid />
-      <Contact />
+      <TeamGrid headingLevel="h2" />
+      <Contact headingLevel="h2" />
     </>
   );
 };
