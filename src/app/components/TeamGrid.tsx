@@ -143,7 +143,7 @@ const TeamGrid = ({ headingLevel = "h1" }: TeamGridProps = {}) => {
     >
       <div className="container pt-16 mx-auto px-6 max-w-7xl relative z-10 h-full flex flex-col">
         {/* Content overlay that covers header and team grid */}
-        <div className="bg-black/25 backdrop-blur-sm rounded-3xl p-6 md:p-8 flex-1 flex flex-col">
+        <div className="bg-black/25 backdrop-blur-sm rounded-3xl p-6 md:p-8 flex-1 flex flex-col relative">
           <div className="text-center mb-8">
             <HeadingTag className="text-3xl md:text-4xl font-bold font-family-orange-squash text-white mb-3">
               Our team of therapists
@@ -239,87 +239,251 @@ const TeamGrid = ({ headingLevel = "h1" }: TeamGridProps = {}) => {
                 </Swiper>
               </div>
             ) : (
-              <div className="overflow-y-auto">
+              <div className="flex flex-col gap-8 md:gap-10">
                 {(() => {
-                  const chunkMembers = (members: UnifiedTeamMember[]) => {
-                    const chunks: UnifiedTeamMember[][] = [];
-                    let currentIdx = 0;
-                    let isFivePersonRow = true;
+                  const rows: UnifiedTeamMember[][] = [];
+                  for (let i = 0; i < displayMembers.length; i += 4) {
+                    rows.push(displayMembers.slice(i, i + 4));
+                  }
 
-                    while (currentIdx < members.length) {
-                      const chunkSize = isFivePersonRow ? 5 : 4;
-                      chunks.push(
-                        members.slice(currentIdx, currentIdx + chunkSize)
-                      );
-                      currentIdx += chunkSize;
-                      isFivePersonRow = !isFivePersonRow;
-                    }
+                  return rows.map((row, rowIndex) => (
+                    <div key={rowIndex} className="flex justify-center gap-8 md:gap-10 lg:gap-12">
+                      {row.map((member, index) => {
+                        const memberId = member._id || member.id || index;
+                        const memberName = member.name;
+                        const memberRole = member.title || member.role;
 
-                    return chunks;
-                  };
-
-                  const memberRows = chunkMembers(displayMembers);
-
-                  return (
-                    <>
-                      {memberRows.map((row, rowIndex) => (
-                        <div
-                          key={rowIndex}
-                          className={`flex justify-center gap-6 ${rowIndex < memberRows.length - 1 ? "mb-6" : ""}`}
-                        >
-                          {row.map((member, index) => {
-                            const memberId = member._id || member.id || index;
-                            const memberName = member.name;
-                            const memberRole = member.title || member.role;
-
-                            return (
-                              <div
-                                key={memberId}
-                                className="text-center cursor-pointer transition-transform duration-300 hover:scale-110"
-                                onClick={() =>
-                                  setExpandedMember(
-                                    expandedMember === memberId
-                                      ? null
-                                      : memberId
-                                  )
-                                }
-                              >
-                                <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-gray-200 rounded-lg mx-auto mb-2 overflow-hidden relative">
-                                  {member.previewPhoto ? (
-                                    <Image
-                                      src={urlFor(member.previewPhoto)
-                                        .width(400)
-                                        .url()}
-                                      alt={`${member.name}, ${member.title || member.role || "Therapist"}`}
-                                      fill
-                                      className="object-cover object-top"
-                                      sizes="(max-width: 768px) 80px, (max-width: 1024px) 96px, 112px"
-                                    />
-                                  ) : (
-                                    <div className="w-full h-full bg-gradient-to-br from-nwt-light-teal to-nwt-coral"></div>
-                                  )}
-                                </div>
-                                <h3 className="font-bold text-white text-sm md:text-base mb-1">
-                                  {memberName}
-                                </h3>
-                                <p className="text-white/90 text-xs md:text-sm">
-                                  {memberRole}
-                                </p>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      ))}
-                    </>
-                  );
+                        return (
+                          <div
+                            key={memberId}
+                            className="text-center cursor-pointer transition-transform duration-300 hover:scale-110 max-w-36 md:max-w-40 lg:max-w-44"
+                            onClick={() =>
+                              setExpandedMember(
+                                expandedMember === memberId
+                                  ? null
+                                  : memberId
+                              )
+                            }
+                          >
+                            <div className="w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 bg-gray-200 rounded-xl mx-auto mb-3 overflow-hidden relative shadow-lg">
+                              {member.previewPhoto ? (
+                                <Image
+                                  src={urlFor(member.previewPhoto)
+                                    .quality(90)
+                                    .url()}
+                                  alt={`${member.name}, ${member.title || member.role || "Therapist"}`}
+                                  fill
+                                  quality={95}
+                                  className="object-cover object-top"
+                                  sizes="(max-width: 768px) 192px, (max-width: 1024px) 224px, 256px"
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-gradient-to-br from-nwt-light-teal to-nwt-coral"></div>
+                              )}
+                            </div>
+                            <h3 className="font-bold text-white text-base md:text-lg mb-1">
+                              {memberName}
+                            </h3>
+                            <p className="text-white/90 text-xs md:text-sm leading-tight">
+                              {memberRole}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ));
                 })()}
               </div>
             )}
           </div>
+
+          {/* Expanded Bio Section */}
+          <AnimatePresence>
+            {expandedMember && (
+              <>
+                <style jsx>{`
+                  .modal-scrollbar::-webkit-scrollbar {
+                    width: 8px;
+                  }
+                  .modal-scrollbar::-webkit-scrollbar-track {
+                    background: rgba(255, 255, 255, 0.05);
+                    border-radius: 10px;
+                  }
+                  .modal-scrollbar::-webkit-scrollbar-thumb {
+                    background: rgba(124, 198, 191, 0.5);
+                    border-radius: 10px;
+                  }
+                  .modal-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: rgba(124, 198, 191, 0.7);
+                  }
+                  .modal-scrollbar {
+                    scrollbar-width: thin;
+                    scrollbar-color: rgba(124, 198, 191, 0.5) rgba(255, 255, 255, 0.05);
+                  }
+                `}</style>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="absolute inset-0 z-50 flex items-center justify-center p-6"
+                  onClick={() => setExpandedMember(null)}
+                >
+                  <div
+                    className="modal-scrollbar bg-black/80 backdrop-blur-md rounded-xl p-6 md:p-8 border border-white/20 max-w-4xl w-full max-h-[65vh] lg:max-h-[70vh] overflow-y-auto"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                  {(() => {
+                    const member = displayMembers.find(
+                      (m) =>
+                        (m._id || m.id || displayMembers.indexOf(m)) ===
+                        expandedMember
+                    );
+                    if (!member) return null;
+
+                    return (
+                      <div className="max-w-4xl mx-auto">
+                        <div className="flex justify-between items-start mb-4">
+                          <div className="flex items-center gap-4">
+                            {member.previewPhoto && (
+                              <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 relative">
+                                <Image
+                                  src={urlFor(member.previewPhoto).width(240).url()}
+                                  alt={`${member.name}, ${member.title || member.role || "Therapist"}`}
+                                  fill
+                                  className="object-cover object-top"
+                                  sizes="80px"
+                                />
+                              </div>
+                            )}
+                            <div>
+                              <h2 className="text-xl md:text-2xl font-bold text-white mb-1">
+                                {member.name}
+                              </h2>
+                              <p className="text-base md:text-lg text-nwt-light-teal">
+                                {member.title || member.role}
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => setExpandedMember(null)}
+                            className="text-white/60 hover:text-white text-2xl"
+                          >
+                            ×
+                          </button>
+                        </div>
+
+                        <div className="flex flex-col lg:flex-row gap-6 w-full">
+                          <div className="flex-1">
+                            <h3 className="text-base md:text-lg font-bold text-white mb-3">
+                              About
+                            </h3>
+                            <div className="text-sm text-white/90 leading-relaxed mb-4">
+                              {member.previewBio ? (
+                                <p>{member.previewBio}</p>
+                              ) : member.bio && Array.isArray(member.bio) ? (
+                                <BlockContent
+                                  blocks={member.bio}
+                                  serializers={{
+                                    types: {
+                                      block: (props: unknown) => {
+                                        const blockProps = props as {
+                                          children: React.ReactNode;
+                                        };
+                                        return (
+                                          <p className="mb-4 text-white/90">
+                                            {blockProps.children}
+                                          </p>
+                                        );
+                                      },
+                                    },
+                                    marks: {
+                                      strong: ({
+                                        children,
+                                      }: {
+                                        children: React.ReactNode;
+                                      }) => (
+                                        <strong className="font-bold text-white">
+                                          {children}
+                                        </strong>
+                                      ),
+                                      em: ({
+                                        children,
+                                      }: {
+                                        children: React.ReactNode;
+                                      }) => <em className="italic">{children}</em>,
+                                    },
+                                  }}
+                                />
+                              ) : typeof member.bio === "string" ? (
+                                <p>{member.bio}</p>
+                              ) : (
+                                <p>No bio available</p>
+                              )}
+                            </div>
+
+                            <h3 className="text-base md:text-lg font-bold text-white mb-3">
+                              Specializations
+                            </h3>
+                            <div className="flex flex-wrap gap-2">
+                              {member.specializations?.map(
+                                (spec: string, index: number) => (
+                                  <span
+                                    key={index}
+                                    className="bg-nwt-coral/80 text-white px-3 py-1 rounded-full text-sm"
+                                  >
+                                    {spec}
+                                  </span>
+                                )
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="flex-1 flex flex-col items-center">
+                            <div className="flex-1">
+                              {member.identityExperience &&
+                                member.identityExperience.filter(
+                                  (item: string) => item && item.trim()
+                                ).length > 0 && (
+                                  <>
+                                    <h3 className="text-base md:text-lg font-bold text-white mb-3">
+                                      Identity Experience
+                                    </h3>
+                                    <div className="space-y-1 text-sm text-white/90 mb-4">
+                                      {member.identityExperience
+                                        .filter(
+                                          (item: string) => item && item.trim()
+                                        )
+                                        .map((item: string, index: number) => (
+                                          <p key={index}>{item}</p>
+                                        ))}
+                                    </div>
+                                  </>
+                                )}
+
+                              <div className="mt-4">
+                                <Link
+                                  href={`/team/${member.slug || member.name?.toLowerCase().replace(/\s+/g, "-")}`}
+                                  className="inline-block bg-nwt-dark-teal hover:bg-nwt-dark-teal/90 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                                >
+                                  See full profile
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
+              </motion.div>
+              </>
+            )}
+          </AnimatePresence>
         </div>
 
         {alumniMembers.length > 0 && (
-          <div className="mt-8 mb-12 bg-black/50 backdrop-blur-sm rounded-3xl p-6 md:p-8">
+          <div className="mt-24 mb-12 bg-black/50 backdrop-blur-sm rounded-3xl p-6 md:p-8">
             <h2 className="text-center font-family-orange-squash text-white mb-4 text-2xl md:text-3xl font-bold">
               Alumni
             </h2>
@@ -351,168 +515,6 @@ const TeamGrid = ({ headingLevel = "h1" }: TeamGridProps = {}) => {
           </div>
         )}
       </div>
-
-      {/* Expanded Bio Section */}
-      <AnimatePresence>
-        {expandedMember && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-6 pt-20"
-            onClick={() => setExpandedMember(null)}
-          >
-            <div
-              className="bg-black/80 backdrop-blur-md rounded-3xl p-8 border border-white/20 max-w-4xl w-full max-h-[80vh] overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {(() => {
-                const member = displayMembers.find(
-                  (m) =>
-                    (m._id || m.id || displayMembers.indexOf(m)) ===
-                    expandedMember
-                );
-                if (!member) return null;
-
-                return (
-                  <div className="max-w-4xl mx-auto">
-                    <div className="flex justify-between items-start mb-6">
-                      <div className="flex items-center gap-4">
-                        {member.previewPhoto && (
-                          <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 relative">
-                            <Image
-                              src={urlFor(member.previewPhoto).width(240).url()}
-                              alt={`${member.name}, ${member.title || member.role || "Therapist"}`}
-                              fill
-                              className="object-cover object-top"
-                              sizes="80px"
-                            />
-                          </div>
-                        )}
-                        <div>
-                          <h2 className="text-3xl font-bold text-white mb-2">
-                            {member.name}
-                          </h2>
-                          <p className="text-xl text-nwt-light-teal">
-                            {member.title || member.role}
-                          </p>
-                        </div>
-                      </div>
-                      <button
-                        onClick={() => setExpandedMember(null)}
-                        className="text-white/60 hover:text-white text-2xl"
-                      >
-                        ×
-                      </button>
-                    </div>
-
-                    <div className="flex flex-col lg:flex-row gap-8 w-full">
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold text-white mb-4">
-                          About
-                        </h3>
-                        <div className="text-white/90 leading-relaxed mb-6">
-                          {member.previewBio ? (
-                            <p>{member.previewBio}</p>
-                          ) : member.bio && Array.isArray(member.bio) ? (
-                            <BlockContent
-                              blocks={member.bio}
-                              serializers={{
-                                types: {
-                                  block: (props: unknown) => {
-                                    const blockProps = props as {
-                                      children: React.ReactNode;
-                                    };
-                                    return (
-                                      <p className="mb-4 text-white/90">
-                                        {blockProps.children}
-                                      </p>
-                                    );
-                                  },
-                                },
-                                marks: {
-                                  strong: ({
-                                    children,
-                                  }: {
-                                    children: React.ReactNode;
-                                  }) => (
-                                    <strong className="font-bold text-white">
-                                      {children}
-                                    </strong>
-                                  ),
-                                  em: ({
-                                    children,
-                                  }: {
-                                    children: React.ReactNode;
-                                  }) => <em className="italic">{children}</em>,
-                                },
-                              }}
-                            />
-                          ) : typeof member.bio === "string" ? (
-                            <p>{member.bio}</p>
-                          ) : (
-                            <p>No bio available</p>
-                          )}
-                        </div>
-
-                        <h3 className="text-xl font-bold text-white mb-4">
-                          Specializations
-                        </h3>
-                        <div className="flex flex-wrap gap-2 mb-6">
-                          {member.specializations?.map(
-                            (spec: string, index: number) => (
-                              <span
-                                key={index}
-                                className="bg-nwt-coral/80 text-white px-3 py-1 rounded-full text-sm"
-                              >
-                                {spec}
-                              </span>
-                            )
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="flex-1 flex flex-col items-center">
-                        <div className="flex-1">
-                          {member.identityExperience &&
-                            member.identityExperience.filter(
-                              (item: string) => item && item.trim()
-                            ).length > 0 && (
-                              <>
-                                <h3 className="text-xl font-bold text-white mb-4">
-                                  Identity Experience
-                                </h3>
-                                <div className="space-y-2 text-white/90">
-                                  {member.identityExperience
-                                    .filter(
-                                      (item: string) => item && item.trim()
-                                    )
-                                    .map((item: string, index: number) => (
-                                      <p key={index}>{item}</p>
-                                    ))}
-                                </div>
-                              </>
-                            )}
-
-                          <div className="mt-6">
-                            <Link
-                              href={`/team/${member.slug || member.name?.toLowerCase().replace(/\s+/g, "-")}`}
-                              className="inline-block bg-nwt-dark-teal hover:bg-nwt-dark-teal/90 text-white px-6 py-3 mt-20 rounded-lg font-semibold transition-colors"
-                            >
-                              See full profile
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })()}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 };

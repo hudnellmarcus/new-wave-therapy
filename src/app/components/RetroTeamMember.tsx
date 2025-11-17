@@ -129,10 +129,12 @@ export default function RetroTeamMember({ therapist }: RetroTeamMemberProps) {
               </div>
             </div>
 
-            <Button variant="secondary" size="lg" className="w-fit">
-              <Calendar className="w-4 h-4 mr-2" />
-              Schedule Consultation
-            </Button>
+            <Link href="/contact">
+              <Button variant="secondary" size="lg" className="w-fit">
+                <Calendar className="w-4 h-4 mr-2" />
+                Schedule Consultation
+              </Button>
+            </Link>
           </div>
         </div>
 
@@ -223,19 +225,6 @@ export default function RetroTeamMember({ therapist }: RetroTeamMemberProps) {
                 </div>
               )}
             </div>
-          </div>
-        </div>
-
-        {/* CTA */}
-        <div className="text-center">
-          <div className="bg-gradient-to-br from-nwt-dark-teal via-nwt-navy to-nwt-coral rounded-3xl p-12 md:p-16 border border-white/10">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Let&apos;s Work Together</h2>
-            <p className="text-xl text-white/90 mb-10 max-w-3xl mx-auto leading-relaxed">
-              Ready to begin your healing journey? {therapist.pronouns ? `${therapist.pronouns.split('/')[0]} is` : 'I am'} here to provide compassionate, professional support tailored to your unique needs.
-            </p>
-            <button className="bg-white text-black hover:bg-gray-100 px-12 py-5 rounded-2xl font-bold text-xl transition-colors shadow-lg">
-              Schedule Consultation
-            </button>
           </div>
         </div>
       </div>
